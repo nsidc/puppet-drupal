@@ -5,12 +5,6 @@
 # `vagrant nsidc init`
 
 .vagrant*/
-
 .nsidc-project.yaml
-
-/puppet/.librarian/
-/puppet/.tmp/
-/puppet/Puppetfile.lock
-/puppet/modules/
 
 # end vagrant-nsidc

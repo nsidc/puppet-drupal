@@ -1,6 +1,6 @@
 ---
-project: default
-gitrepo: git@bitbucket.org:nsidc/my-amazing-project.git
+project: drupal
+gitrepo: git@bitbucket.org:nsidc/drupal.git
 vsphere:
   template: trusty64-nsidc
 virtualbox:
@@ -12,6 +12,6 @@ puppet:
   apply:
     options: --debug --verbose --detailed-exitcodes --modulepath=./puppet/modules
       --hiera_config=./puppet/hiera.yaml
-    manifest: ./puppet/site.pp
+    manifest: ./puppet/manifests
   librarian:
     puppetfile: ./puppet/Puppetfile

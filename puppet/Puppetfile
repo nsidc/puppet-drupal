@@ -1,13 +1,16 @@
-forge "https://forgeapi.puppetlabs.com"
+forge 'https://forgeapi.puppetlabs.com'
 
 # Module for access to NSIDC Enterprise storage
-mod "nsidc/nsidc_nfs",
-  :git => "git@bitbucket.org:/nsidc/puppet-nsidc-nfs.git"
+mod 'nsidc/nsidc_nfs',
+  :git => 'git@bitbucket.org:/nsidc/puppet-nsidc-nfs.git',
+  :ref => 'latest'
+
+mod 'rafaelfc-pear'
 
 # Module for creating NSIDC Jenkins servers
-mod "nsidc/nsidc_jenkins",
-  :git => "git@bitbucket.org:/nsidc/puppet-nsidc-jenkins.git",
-  :ref => 'latest'
+# mod 'nsidc/nsidc_jenkins',
+#   :git => 'git@bitbucket.org:/nsidc/puppet-nsidc-jenkins.git',
+#   :ref => 'latest'
 
 # Module for installing python and pip.
 # You may want to use this if using python's bumpversion
