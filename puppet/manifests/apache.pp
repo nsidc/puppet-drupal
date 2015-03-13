@@ -6,14 +6,6 @@ package { 'apache2': }
 package { 'apache2-dev': }
 package { 'libapache2-mod-php5': }
 
-# Install PHP
-package{'php5':}
-package{'php5-mysql':}
-package{'php5-ldap':}
-package{'php5-gd':}
-package{'php5-imagick':}
-package{'php5-json':}
-
 # Enable the Apache service
 service { 'apache2':
   ensure => running,

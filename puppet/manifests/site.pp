@@ -16,3 +16,7 @@ service{'mysql':
   require => Package['mysql-server']
 }
 
+# Trust the SSL certs for snowldap and iceldap
+ssl::trustcert{'snowldap.colorado.edu': port => 636 }
+ssl::trustcert{'iceldap.colorado.edu':  port => 636 }
+
