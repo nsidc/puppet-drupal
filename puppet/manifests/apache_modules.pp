@@ -17,12 +17,9 @@ define apache::module ($module = $title, $status = 'enabled') {
   }
 }
 
-# # Copy apache module files in from /vagrant
-# file { '/etc/apache2/mods-available':
-#   ensure => directory,
-#   source => '/vagrant/puppet/files/apache2/mods-available',
-#   recurse => true,
-#   notify => Service['apache2'],
-#   require => Package['apache2'],
-# }
+# Ensure apache module files are available
+file { '/etc/apache2/mods-available':
+  ensure => directory,
+  require => Package['apache2']
+}
 

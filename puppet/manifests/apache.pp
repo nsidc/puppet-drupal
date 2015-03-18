@@ -41,6 +41,14 @@ file { '/var/log/apache2':
 apache::module{'php5':}
 apache::module{'ssl':}
 apache::module{'rewrite':}
+apache::module{'proxy':}
+apache::module{'proxy_http':}
+apache::module{'include':}
+
+# Disabling mod_deflate for now, it breaks SSI's
+apache::module{'deflate':
+  status => 'disabled',
+}
 
 ##### Enable / Disable Apache Config files #####
 
