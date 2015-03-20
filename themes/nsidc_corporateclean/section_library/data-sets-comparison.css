@@ -1,0 +1,92 @@
+#content #table-comparison {
+	width: 810px;
+}
+#content #table-comparison th {
+	width: 25%;
+}
+#table-comparison td, #table-comparison th {
+	padding: 8px;
+	border: 1px solid #c9dce7;
+}
+#table-comparison th {
+	background: #e7eaf0;
+}
+.dataset-details img {
+	float: left;
+	margin-right: 12px;
+	border: 1px solid #dddddd;
+	margin-bottom: 8px;
+	margin-top: 5px;
+}
+.dataset-details h3 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	color: #06070B;
+	margin-bottom: 6px;
+	margin-top: -12px;
+	font-weight: bold;
+}
+.dataset-details p {
+	margin-bottom: 12px;
+}
+.ui-widget-content a {
+    color: #003366;
+}
+.ui-widget-header {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: none;
+    margin-left: 20px;
+	border: 1px solid #f0f0f0;
+	border-width: 1px 1px 0 0;
+	border-color: #f0f0f0 #fff #fff #fff;
+	box-shadow: 2px 0px 3px #CCCCCC;
+}   
+.ui-widget-header a {
+    background: url(/daac/images/close-icon.png) repeat scroll top left transparent;
+    float: right;
+    height: 16px;
+    width: 16px;
+}
+.ui-widget-header a:hover {
+	    background: url(/daac/images/close-icon-hover.png) repeat scroll top right transparent;
+		border: none;
+}
+.ui-widget-content {
+    background: none repeat scroll 0 0 transparent;
+    border: none;
+    color: #565656;
+	float: left;
+}
+.ui-widget {
+    font-family: Arial,Helvetica,sans-serif;
+	background:url(/daac/images/popup-arrow.png) left center no-repeat transparent;
+	box-shadow: none;
+}
+.ui-widget-header .ui-icon {
+    display: none;
+}
+.dataset-title {
+	cursor: pointer;
+	color: #003366;
+	text-decoration: underline;
+}
+
+.ui-dialog-content {
+    background-color: #FFFFFF !important;
+    box-shadow: 2px 3px 3px #CCCCCC;
+    margin-left: 20px;
+    padding: 15px;
+	border-radius: 0px 0px 6px 6px;
+	float: left;
+}
+#table-comparison ul li {
+	list-style-position: inside;
+}
+#table-comparison ul {
+	margin-left: 0px;
+}
+
+.cssTable td ul {
+	margin-left: 10px;
+	padding-left: 0px;
+}

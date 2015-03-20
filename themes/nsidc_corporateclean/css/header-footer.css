@@ -1,0 +1,150 @@
+/* HEADER STYLES over rides to nsidc.org/css/nsidc-header.css */
+
+.region-header #utility, .region-header #header {
+	min-width: 100%;
+}
+
+
+#header #logo {
+	min-width: 264px;
+	margin: 0 0 0 15px;
+}
+
+#header div#nsidc-menu {
+	z-index: 100;
+}  
+   
+#header ul.blockeasing {
+	margin-left: 0;
+	display: block;
+}
+
+#utility {
+	background: none;
+}
+
+
+/****************
+
+Footer styles over-rides to nsidc.org
+
+****************/
+
+#footerNSIDC {
+	position: relative;
+	top: 0;
+	width: 100%;
+	color: #fff;
+}
+#footerNSIDC p {
+	font-size: 11px;
+	color: #fff;
+	padding:0;
+	margin:3px;
+}
+#footerNSIDC div.footerElement {
+	min-height: 35px;
+	padding:0;
+	margin-left: auto;
+	margin-right: auto;
+}
+div.footerElement img {
+	margin: 8px 0;
+}
+
+div#footerNSIDC img {
+	vertical-align:middle;
+	margin-top: 15px;
+	background: none;
+	width: auto;
+	}
+#footerNSIDC .footerTitleTextNSIDC {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: .8em;
+	font-weight: bold;
+	color: #fff;
+	padding-top: 15px;
+}
+
+#sponsorsContainerNSIDC {
+	margin: 0;
+	padding: 0 .8em;
+}
+
+#footerNSIDC .footer-column ul {
+	list-style-type: none;
+	margin-left: 0px;
+	padding-left: 0px;
+	padding-right: 0px;
+	margin-bottom: 15px;
+}
+#footerNSIDC .footer-column ul li {
+	margin-bottom: 8px;
+}
+#footerNSIDC .footer-column h2 {
+	padding-left: 0px;
+	color: #fff;
+	font-size: 18px;
+	border: none;
+	margin-bottom: 5px;
+}
+#footerNSIDC p a {
+	color: #BFCDDB;
+	font-size: 11px;
+}
+#footerNSIDC a {
+	color: #BFCDDB;
+	text-decoration: none;
+	font-size: 13px;
+}
+#footerNSIDC a:hover {
+	text-decoration: underline;
+	color: #88bee7; 
+}
+#footerNSIDC #footer-bottom {
+	clear: both;
+	border-top-width: 1px;
+	border-top-style: solid;
+	border-top-color: #CDDCED;
+	padding-top: 20px;
+	padding-bottom: 10px;
+	background: #002248;
+}
+
+#footerNSIDC #footer-bottom p {
+	font-size: 12px;
+	text-align: left;
+	float: left;
+	line-height: 20px;
+	width: 100%;
+	margin: 3px 0;
+}
+#footerNSIDC #footer-bottom .affiliate-logos {
+	padding-bottom: 20px;
+	float: right;
+	text-align: right;
+	margin-top: 5px;
+}
+#footerNSIDC #footer-bottom p a {
+	font-size: 12px;
+}
+#footerNSIDC .social-icon-container {
+	width: 60px;
+	margin-bottom: 10px;
+	float: right;
+	margin-top: -34px;
+}
+#footerNSIDC .social-icon-container img {
+	padding-top: 0;
+	margin-top: 0px;
+	padding: 0 3px;
+	float: left;
+}
+#footerNSIDC #footer-bottom img {
+	margin-top: 0px !important;
+	float: left;
+	margin-right: 10px;
+	padding-left: 0;
+	border: none;
+}
+

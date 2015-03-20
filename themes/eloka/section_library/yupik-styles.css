@@ -1,0 +1,433 @@
+@import url(http://fonts.googleapis.com/css?family=Vidaloka);
+html {
+	background-image: none !important;
+	background-color: #ffffff !important;
+}
+.yupik {
+	background: url(yupik-images/page-bkg.png) repeat-x 0 0 #F9F1DE;
+	margin: 0;
+	width: 100%;
+	line-height: 1.5;
+}
+.yupik #wrapper {
+	box-shadow: none;
+	margin-top: 0;
+}
+.yupik #header {
+	background: #ffffff;
+	height: 109px;
+}
+.yupik div#navigation {
+    background: none repeat scroll 0 0 #760B1B;
+	border-bottom: 1px solid #fff;
+	border-radius: 10px 10px 0 0;
+	float: left;
+	width: 100%;
+}
+
+.yupik #navigation ul.menu li a:hover {
+	background: #6d5d44;
+}
+.yupik #navigation ul.menu li.expanded:hover > ul.menu { 
+	display:none !important; 
+}
+/* yupik banner */
+.yupik #wrapper #yupik-banner ul {
+	float: right;
+	width: 307px;
+	list-style-type: none;
+}
+.yupik #wrapper #yupik-banner ul li {
+	float: left;
+	padding-right: 10px;
+	border-right-width: 1px;
+	border-right-style: solid;
+	border-right-color: #fff8dc;
+	padding-left: 10px;
+	margin-top: 36px;
+	font-size: 16px;
+}
+.yupik #wrapper #yupik-banner ul li:last-child {
+	border-right: none;
+}
+.yupik #wrapper #yupik-banner ul li a {
+	font-family: 'Vidaloka', Georgia, "Times New Roman", Times, serif;
+	color: #fff8dc;
+	text-decoration: none;
+}
+.yupik #wrapper #yupik-banner ul li a:hover {
+	color: #fff;
+	text-decoration: underline;
+}
+.yupik #wrapper #yupik-banner h1 {
+	float: left;
+    font-size: 6px;
+    margin: 0;
+    padding: 0;
+    text-indent: -9999px;
+}
+.yupik #wrapper #yupik-banner h1 a {
+    display: block;
+    height: 100px;
+    margin: 0;
+    padding: 0;
+    width: 650px;
+}
+.yupik #wrapper #yupik-banner {
+	background-image: url(yupik-images/yupik-header.jpg);
+	clear: both;
+	float: left;
+	height: 106px;
+	width: 1100px;
+	overflow: hidden;
+}
+.yupik #wrapper #yupik-feature #feature-photo {
+	margin: 0px;
+	padding: 0px;
+	float: left;
+	width: 786px;
+}
+.yupik #wrapper #yupik-feature #yupik-page-nav {
+	margin: 0px;
+	padding: 0 0 0 768px;
+	float: left;
+	width: 332px;
+	/* [disabled]background-color: #760B1B; */
+}
+.yupik #wrapper #yupik-feature #yupik-page-nav ul {
+	list-style-type: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	height: 476px;
+	overflow: hidden;
+	margin: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+.yupik #wrapper #yupik-feature #yupik-page-nav ul li {
+	height: 103px;
+	overflow: hidden;
+	margin: 0px;
+	padding-top: 8px;
+	padding-right: 15px;
+	padding-bottom: 8px;
+	padding-left: 32px;
+	background-image: url(yupik-images/nav-bkg.png);
+	background-position: left bottom;
+	line-height: 1;
+}
+.yupik #wrapper #yupik-feature #yupik-page-nav ul li:hover {
+	background-image: url(yupik-images/nav-bkg-hover.png);
+	cursor: pointer;
+}
+#yupik-page-nav a {
+	text-decoration: none;
+	color: #fff;
+}
+.yupik #wrapper #yupik-feature #yupik-page-nav ul li h3 {
+	font-family: 'Vidaloka', Georgia, "Times New Roman", Times, serif;
+	font-weight: normal;
+	font-size: 16px;
+	margin: 10px 0 0px 3px;
+	padding-bottom: 0px;
+	color: #fefad0;
+	text-shadow: none;
+}
+.yupik #wrapper #yupik-feature #yupik-page-nav ul li p {
+	color: #FFF;
+	margin-top: 5px;
+	padding-top: 0px;
+	line-height: 18px;
+	font-size: 12px;
+	margin-bottom: 0px;
+	font-family:Geneva,Arial,Verdana,sans-serif;
+}
+.yupik #wrapper #yupik-feature #yupik-page-nav .icon {
+	float: left;
+	margin-right: 5px;
+	background-image: url(yupik-images/icon-bkg.png);
+	background-repeat: no-repeat;
+	padding: 3px;
+	-moz-box-sizing: content-box;
+	box-sizing:content-box;
+}
+.yupik #wrapper #yupik-feature #yupik-page-nav  .active {
+	background-image: url(yupik-images/icon-bkg-active.png);
+}
+.yupik #wrapper #yupik-feature #yupik-page-nav ul #language {
+	padding-top: 3px;
+	height: 109px;
+}
+.yupik #wrapper #yupik-feature {
+	background: url(yupik-images/feature-home.jpg) no-repeat left bottom #730000;
+	margin: 0px;
+	padding: 0px;
+	height: 476px;
+	width: 1100px;
+	clear: both;
+}
+
+.yupik #wrapper #content {
+	padding-top: 40px;
+	margin-bottom: 0;
+	background: #fbf9e9;
+}
+#content p, #content ul, #content ol {
+	font-size: 14px;
+	margin: 0 0 12px 0;
+}
+.yupik #wrapper #content #main {
+	float: left;
+	width: 100%;
+	padding-right: 30px;
+	padding-left: 20px;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+}
+.yupik .eloka-sidebar-layout > .group-left {
+	width: 715px;
+}
+.yupik #content #main h2, .yupik #content #main h1 {
+	font-family: 'Vidaloka', Georgia, "Times New Roman", Times, serif;
+	color: #680000;
+	font-size: 24px;
+}
+#content h3 {
+	color: #241700;
+	font-size: 22px;
+	font-family: 'Vidaloka', Georgia, "Times New Roman", Times, serif;
+	margin-top: 20px;
+	line-height: 30px;
+	font-weight: normal;
+}
+.yupik #wrapper #content #sidebar {
+	float: left;
+	width: 268px;
+	padding: 0 30px 0 17px;
+}
+.yupik #wrapper #content .group-right img {
+	border: 3px solid #c5b9aa;
+}
+
+.yupik #footer, .yupik #footer-container {
+	background-color: #6d5d44;
+	margin: 0;
+	overflow: visible;
+	height: 80px;
+}
+.yupik #footer, .yupik #terms-of-use {
+	margin: 0 auto;
+	width: 100%;
+	text-align: center;
+}
+.yupik #footer-container {
+	width: 100%;
+	clear: both;
+	min-height: 60px;
+}
+.yupik #footer p, .yupik #terms-of-use p {
+	color: #FAF4E6;
+	font-size: .8em;
+	clear: both;
+	text-shadow: none;
+}
+.yupik #footer-container a, 
+.yupik #footer-container #footer .contact {
+	color: #FFF;
+}
+
+#content #main .yupik-text {
+	float: left;
+	width: 45%;
+	margin-right: 4%;
+}
+#content #main .english-text {
+	float: right;
+	width: 48%;
+}
+#content #main .divider-line {
+	clear: both;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #C5B9AA;
+	margin: 0px;
+	padding: 0px;
+	font-size: 6px;
+	line-height: 6px;
+}
+
+#content #main .attribution {
+	clear: both;
+	text-align: center;
+	margin-bottom: 15px;
+	margin-top: -10px;
+	/* [disabled]display: none; */
+}
+#content #main .attribution p {
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 8px;
+	margin-left: 0px;
+}
+#content #main .learn-more-section {
+	padding: 0px 15px;
+	border: 1px solid #eee3c7;
+	background-color: #fdf7e4;
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+#content .learn-more-section .learn-more, #content .learn-more-section .learn-more-open {
+	background-color: #eee3c7;
+	position: relative;
+	top: -12px;
+	padding: 3px 20px 3px 20px;
+	border: 1px solid #c5b9aa;
+	color: #666;
+	cursor: pointer;
+	background-image: url(yupik-images/learn-more-arrow-down.png);
+	background-repeat: no-repeat;
+	background-position: 110px 10px;
+	width: 100px;
+	left: 270px;
+	display: inline-block;
+}
+#content .learn-more-section .learn-more-open {
+	background-image: url(yupik-images/learn-more-arrow-up.png) !important;
+	background-position: 110px 7px;
+ }
+#content #main h4 {
+	color: #400;
+	margin-bottom: 12px;
+	padding-bottom: 0px;
+	font-size: 18px;
+	font-family: 'Vidaloka', Georgia, "Times New Roman", Times, serif;
+	line-height: 24px;
+}
+#content #main blockquote {
+	margin-top: -8px;
+	padding-top: 0px;
+}
+#content #main blockquote p {
+	font-style: italic;
+}
+#content #main blockquote p:first-child {
+	margin-top: 0;
+}
+#content .about-translations {
+	/* [disabled]background-color: #eee3c7; */
+	display: inline;
+	float: right;
+	padding-top: 1px;
+	padding-right: 10px;
+	padding-bottom: 1px;
+	padding-left: 10px;
+	font-size: 12px;
+	color: #666;
+	border: 1px solid #d9ccbd;
+	margin-right: 10px;
+	cursor: pointer;
+}
+#content .about-translations:hover {
+	background-color: #f1e9d5;
+	text-decoration: underline;
+}
+.learn-more-section .attribution  img {
+	border: 1px solid #d9ccbd;
+	padding: 2px;
+}
+#content #main .page-sub-title {
+	font-family: 'Vidaloka', Georgia, "Times New Roman", Times, serif;
+	font-size: 18px;
+	font-style: normal;
+	color: #666;
+	line-height: 24px;
+} 
+#content .learn-more-section .yupik-text p {
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-size: 16px;
+	font-style: italic;
+}
+
+#content .learn-more-section h3 {
+	font-size: 18px;
+	line-height: 26px;
+	margin-top: -12px;
+	cursor: pointer;
+	color: #333333;
+}
+#content #main .learn-more-section div {
+	display: none;
+}
+.about-translations a.define,
+.about-translations a.define:hover {
+	outline: none;
+	border-bottom: none;
+}
+.tooltip{ position: absolute; top: 0; left: 0; z-index: 3; display: none; }
+
+.float-left {
+	float: left;
+	margin-right: 12px;
+}
+.float-right {
+	float: right;
+	margin-left: 12px;
+}.yupik-table {
+	border: 1px solid #CCC;
+}
+.yupik-table td {
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 0px;
+	padding-left: 8px;
+	border: 1px solid #ccc;
+}
+.yupik-table th {
+	font-weight: normal;
+	background-color: #E3DCBE;
+	font-variant: small-caps;
+	text-align: center;
+}
+.yupik #wrapper #main-image-caption {
+	float: left;
+	width: 746px;
+	margin-top: -36px;
+	height: 20px;
+	padding: 0;
+	color: #fff;
+	margin-bottom: 2px;
+}
+.yupik #wrapper .main-image-caption-2lines {
+	margin-top: -16px !important;
+}
+#main-image-caption p {
+	margin: 0px;
+	padding: 0px;
+	float: left;
+	font-size: 11px;
+	font-weight: bold;
+	background-image: url(yupik-images/catpion-bkg.png);
+	padding: 10px 20px;
+	display: none;
+}
+.yupik .ui-tooltip-light .ui-tooltip-titlebar {
+    color: #FFFFFF;
+    font-weight: bold;
+	padding: 5px;
+	margin: 1px;
+	background-color: #6d5d44;
+}
+.yupik .ui-tooltip-light .ui-tooltip-content {
+    background-color: #464035;
+    border-style: solid;
+    border-width: 1px;
+    color: #FFFFFF;
+    font-size: 12px;
+    line-height: 20px;
+    overflow: hidden;
+    padding: 5px 9px;
+    position: relative;
+    text-align: left;
+    word-wrap: break-word;
+}

@@ -1,0 +1,108 @@
+table.views-table {
+	width: 810px;
+	border-collapse: collapse;
+}
+.views-table td, .views-table th {
+	padding: 8px;
+	border: 1px solid #ddd;
+	vertical-align: top;
+}
+.views-table th {
+	vertical-align: middle;
+}
+.views-table th {
+	background: #656666;
+}
+.views-table ul li {
+	list-style-position: inside;
+}
+.views-table ul {
+	margin-left: 0px;
+}
+.views-table tr.odd {
+	background: #f4f4f4;
+}
+.views-field-title {
+	width: 250px;
+}
+.views-field-field-dataset-dc-date {
+	width: 100px;
+}
+.views-field-field-dataset-geo-coordinates {
+	white-space: wrap;
+}
+.views-field-field-dataset-geo-coordinates-4 {
+	width: 160px;
+}
+.dataset-details {
+	display: none;
+}
+.dataset-details img {
+	float: left;
+	margin-right: 12px;
+	border: 1px solid #dddddd;
+	margin-bottom: 8px;
+	margin-top: 5px;
+}
+.dataset-details h3 {
+	font-size: 16px;
+	color: #06070B;
+	margin-bottom: 6px;
+	margin-top: -12px;
+	font-weight: bold;
+}
+.dataset-details p, .dataset-summary {
+	margin-bottom: 12px;
+	font-size: 90%;
+}
+.ui-widget-content a {
+    color: #003366;
+	outline: none;
+}
+.ui-widget-header {
+    background: none;
+	border: none;
+	border-width: 0;
+	box-shadow: none;
+	height: 30px;
+	width: 34px;
+	position: absolute;
+	top: 0;
+	left: 318px;
+}   
+
+.ui-widget-content {
+    background: none repeat scroll 0 0 transparent;
+    border: none;
+    color: #565656;
+	float: left;
+}
+.ui-widget {
+	background: url(images/dataset-popup-arrow.png) left center no-repeat transparent;
+	box-shadow: none;
+}
+.ui-widget-header .ui-icon {
+    display: none;
+}
+.dataset-title {
+	cursor: pointer;
+	color: #003366;
+	text-decoration: underline;
+	font-family:'Open Sans',Segoe UI,Arial,Helvetica,sans-serif;
+	font-size: 100%;
+	font-weight: 700;
+}
+
+.ui-dialog-content {
+    background-color: #FFFFFF !important;
+    box-shadow: 2px 3px 3px #CCCCCC;
+    margin-left: 20px;
+    padding: 15px;
+	border-radius: 6px;
+	float: left;
+	border-top: 1px solid #EEEEEE;
+}
+.ui-dialog-title { display: none }
+.views-field-field-dataset-geo-coordinates {
+	width: 70px;
+}
