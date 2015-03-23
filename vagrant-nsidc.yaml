@@ -1,6 +1,8 @@
 ---
 project: drupal
 gitrepo: git@bitbucket.org:nsidc/drupal.git
+website: nsidc.org
+
 vsphere:
   template: trusty64-nsidc
 virtualbox:
@@ -15,3 +17,4 @@ puppet:
     manifest: ./puppet/manifests
   librarian:
     puppetfile: ./puppet/Puppetfile
+

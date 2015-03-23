@@ -1,18 +1,5 @@
 # vagrant-nsidc settings
 Define project                        <%= scope.function_hiera(['project']) %>
 Define environment                    <%= scope.lookupvar('::environment') %>
-
-# general urs oath settings
-# Define oauth_server                   <%%= scope.function_hiera(['oauth::server::this']) %>
-# Define oauth_endpoint_user            <%%= scope.function_hiera(['oauth::endpoint::user']) %>
-# Define oauth_endpoint_auth            <%%= scope.function_hiera(['oauth::endpoint::auth']) %>
-# Define oauth_endpoint_token           <%%= scope.function_hiera(['oauth::endpoint::token']) %>
-# Define oauth_endpoint_token_authtype  <%%= scope.function_hiera(['oauth::endpoint::token::authtype']) %>
-
-# local urs oauth settings
-# Define oauth_clientid		      <%%= scope.function_hiera(['oauth::clientid']) %>
-# Define oauth_ursauthcode              <%%= scope.function_hiera(['oauth::ursauthcode']) %>
-# Define oauth_ursauthgroup             <%%= scope.function_hiera(['oauth::ursauthgroup']) %>
-# Define oauth_cryptopasscode           <%%= scope.function_hiera(['oauth::cryptopasscode']) %>
-# Define oauth_redirecturi              <%%= scope.function_hiera(['oauth::redirecturi']) %>
+Define website                        <%= scope.function_hiera(['website']) %>
 

@@ -1,3 +1,6 @@
+# Load website name from yaml
+$website = hiera('website')
+$drupal_directory = '/var/www/drupal'
 
 # Enable PHP puppet module and install php
 # (this fails if install_options is left blank)
@@ -5,7 +8,7 @@ class{'php':
   install_options => [ '-y' ],
 }
 
-# PHP Pear Modules
+# Install drush (and dependencies) with pear
 php::pear::module { 'drush':
   repository  => 'pear.drush.org',
   use_package  => false,
@@ -21,7 +24,7 @@ php::pear::module { 'PEAR':
   use_package  => false,
 }
 
-# PHP Modules
+# Install PHP Modules needed for Drupal
 php::module {'mysql':}
 php::module {'ldap':}
 php::module {'gd':}
@@ -34,50 +37,41 @@ file{'/home/vagrant/.drush':
   owner => 'vagrant'
 }
 file{'/home/vagrant/.drush/drushrc.php':
-  content => '<?php \
-  $options["r"] = "/var/www/drupal"; \
-  $options["l"] = "http://nsidc.org"; \
-  ',
+  content => "<?php \
+  \$options[\"r\"] = \"${drupal_direcotry}\"; \
+  \$options[\"l\"] = \"http://${website}\"; \
+  ",
   owner => 'vagrant'
 }
 
-# Restore from a backup
-exec{'drush-archive-restore-staging-nsidc.org':
-  command => 'drush archive-restore \
-    --destination=/var/www/drupal \
-    --db-url=mysql://root@localhost/drupal \
-    /apps/drupal/backups/archive-dump/staging.nsidc.org-20150311.tar.gz',
-  creates => '/var/www/drupal',
-  user => 'vagrant',
+# Set files and private-files to be owned by www-date (default web user)
+# Use chown because puppet file recursion can take a long time with many files
+file { "${drupal_directory}/sites/${website}/files":
+  ensure => 'directory',
+  owner => 'www-data',
+  group => 'www-data',
+  require => Package['apache2'],
+  notify => Exec['chown-drupal-files'],
+}
+file { "${drupal_directory}/sites/${website}/private-files":
+  ensure => 'directory',
+  owner => 'www-data',
+  group => 'www-data',
+  require => Package['apache2'],
+  notify => Exec['chown-drupal-files'],
+}
+exec {'chown-drupal-files':
+  command => "chown -Rh www-data:www-data \
+    ${drupal_directory}/sites/${website}/files \
+    ${drupal_directory}/sites/${website}/private-files",
+  refreshonly => true,
   path => '/bin:/sbin:/usr/bin:/usr/sbin',
-  require => [
-    Php::Pear::Module['drush'],
-    Nsidc_nfs::Sharemount['/apps/drupal'],
-  ],
 }
 
-# # Install drupal7 with drush
-# exec{'drush-install-drupal':
-#   command => 'drush pm-download --drupal-project-rename drupal-7',
-#   cwd => '/var/www',
-#   user => 'vagrant',
-#   creates => '/var/www/drupal',
-#   notify => Exec['drush-site-install-default'],
-#   path => '/bin:/sbin:/usr/bin:/usr/sbin',
-#   require => Pear::Package['drush']
-# }
-# 
-# # Do a standard site installation with all defaults
-# exec{'drush-site-install-default':
-#   command => 'yes | drush site-install standard \
-#     --account-name=admin \
-#     --account-pass=admin \
-#     --db-url=mysql://root@localhost/drupal',
-#   cwd => '/var/www/drupal',
-#   user => 'vagrant',
-#   provider => shell,
-#   path => '/bin:/sbin:/usr/bin:/usr/sbin',
-#   require => Pear::Package['drush'],
-#   refreshonly => true,
-# }
+# Setup environment specific configuration
+if $environment == 'local' {
+  include drupal::site::install
+} else {
+  include drupal::site::restore
+}
 
