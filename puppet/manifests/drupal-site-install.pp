@@ -1,9 +1,10 @@
+# A defined type to install drupal with drush
 class drupal::site::install (
   $version = '7',
 ) {
 
   # Install drupal7 with drush
-  exec{'drush-install-drupal':
+  exec{'drush-download-drupal':
     command => "drush pm-download --drupal-project-rename drupal-${version}",
     cwd => '/var/www',
     user => 'vagrant',
@@ -31,3 +32,4 @@ class drupal::site::install (
     ]
   }
 }
+

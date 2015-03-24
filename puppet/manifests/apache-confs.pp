@@ -1,4 +1,4 @@
-# Create a defined type to enable an apache conf
+# A defined type to enable an apache conf
 define apache::conf ($conf = $title, $status = 'enabled') {
   if $status == 'enabled' {
     exec { "a2enconf ${conf}":
@@ -21,14 +21,5 @@ define apache::conf ($conf = $title, $status = 'enabled') {
       ]
     }
   }
-}
-
-# Copy apache conf files in from /vagrant
-file { '/etc/apache2/conf-available':
-  ensure => directory,
-  source => '/vagrant/puppet/files/apache2/conf-available',
-  recurse => true,
-  notify => Service['apache2'],
-  require => Package['apache2'],
 }
 

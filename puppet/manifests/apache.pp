@@ -1,6 +1,3 @@
-
-##### Install Apache #####
-
 # Install Apache
 package { 'apache2': }
 package { 'apache2-dev': }
@@ -17,7 +14,7 @@ service { 'apache2':
   ]
 }
 
-##### Setup Apache files #####
+# Fix up Apache default permissions 
 
 # Set /var/www to be owned by vagrant
 file { '/var/www':
@@ -31,32 +28,9 @@ file { '/var/www':
 # Grant read permissions on apache logs
 file { '/var/log/apache2':
   ensure => 'directory',
-  mode => 'a+rx',
+  mode => 'a+r',
   recurse => 'true',
   require => Package['apache2']
-}
-
-##### Enable / Disable Apache Modules #####
-
-apache::module{'php5':}
-apache::module{'ssl':}
-apache::module{'rewrite':}
-apache::module{'proxy':}
-apache::module{'proxy_http':}
-apache::module{'include':}
-
-# Disabling mod_deflate for now, it breaks SSI's
-apache::module{'deflate':
-  status => 'disabled',
-}
-
-##### Enable / Disable Apache Config files #####
-
-# Generate defined values in apache config and enable server-wide
-apache::conf{'define':}
-file{'/etc/apache2/conf-available/define.conf':
-  ensure => present,
-  content => template('/vagrant/puppet/templates/define.conf.erb'),
 }
 
 # Disable some default server-wide http settings
@@ -65,11 +39,27 @@ apache::conf{'security': status => 'disabled' }
 # Enable some custom server-wide http settings
 apache::conf{'http-settings':}
 
-##### Enable / Disable Apache Sites #####
-
 # Disable default site
 apache::site{'000-default': status => 'disabled' }
 
-# Enable drupal site
-apache::site{'drupal':}
+# Copy apache conf files in from /vagrant
+file { '/etc/apache2/conf-available':
+  ensure => directory,
+  source => '/vagrant/puppet/files/apache/conf-available',
+  recurse => true,
+  notify => Service['apache2'],
+  require => Package['apache2'],
+}
+
+# Copy apache site files in from /vagrant
+file { '/etc/apache2/sites-available':
+  ensure => directory,
+  source => '/vagrant/puppet/files/apache/sites-available',
+  recurse => true,
+  notify => Service['apache2'],
+  require => [
+    Package['apache2'],
+    File['/etc/apache2/conf-available'],
+  ]
+}
 

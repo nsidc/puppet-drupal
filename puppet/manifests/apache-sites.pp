@@ -1,4 +1,4 @@
-# Create a defined type to enable an apache site
+# A defined type to enable an apache site (Debian style)
 define apache::site ($site = $title, $status = 'enabled') {
   if $status == 'enabled' {
     exec { "a2ensite ${site}":
@@ -21,17 +21,5 @@ define apache::site ($site = $title, $status = 'enabled') {
       ]
     }
   }
-}
-
-# Copy apache site files in from /vagrant
-file { '/etc/apache2/sites-available':
-  ensure => directory,
-  source => '/vagrant/puppet/files/apache2/sites-available',
-  recurse => true,
-  notify => Service['apache2'],
-  require => [
-    Package['apache2'],
-    File['/etc/apache2/conf-available'],
-  ]
 }
 

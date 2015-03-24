@@ -1,4 +1,4 @@
-# Create a defined type to enable an apache module
+# A defined type to enable an apache module (Debian style)
 define apache::module ($module = $title, $status = 'enabled') {
   if $status == 'enabled' {
     exec { "a2enmod ${module}":
@@ -12,14 +12,8 @@ define apache::module ($module = $title, $status = 'enabled') {
       onlyif => "test -e /etc/apache2/mods-enabled/${module}.load",
       path => '/bin:/sbin:/usr/bin:/usr/sbin',
       notify => Service['apache2'],
-      require => File ['/etc/apache2/mods-available'],
+      require => Package['apache2'],
     }
   }
-}
-
-# Ensure apache module files are available
-file { '/etc/apache2/mods-available':
-  ensure => directory,
-  require => Package['apache2']
 }
 

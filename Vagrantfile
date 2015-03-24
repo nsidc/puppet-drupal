@@ -7,10 +7,19 @@ Vagrant.configure(2) do |config|
   config.vm.network "forwarded_port", guest: 80, host: 9080
   config.vm.network "forwarded_port", guest: 443, host: 9443
 
-  # Sync themes
-  config.vm.synced_folder "themes/", "/var/www/drupal/sites/all/themes/"
+  # Sync modules
+  config.vm.synced_folder "modules/contrib/", "/var/www/drupal/sites/all/modules/contrib/", 
+    type: "rsync", rsync__args: ["--verbose", "--archive", "--archive", "--delete", "-z"]
+  config.vm.synced_folder "modules/custom/", "/var/www/drupal/sites/all/modules/custom/", 
+    type: "rsync", rsync__args: ["--verbose", "--archive", "--archive", "--delete", "-z"]
 
-  # Puppet config
+  # Sync themes
+  config.vm.synced_folder "themes/contrib/", "/var/www/drupal/sites/all/themes/", 
+    type: "rsync", rsync__args: ["--verbose", "--archive", "--archive", "-z"]
+  config.vm.synced_folder "themes/custom/", "/var/www/drupal/sites/all/themes/", 
+    type: "rsync", rsync__args: ["--verbose", "--archive", "--archive", "-z"]
+
+  # Apply puppet
   config.vm.provision :nsidc_puppet
 
 end
