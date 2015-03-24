@@ -14,9 +14,9 @@ Vagrant.configure(2) do |config|
     type: "rsync", rsync__args: ["--verbose", "--archive", "--archive", "--delete", "-z"]
 
   # Sync themes
-  config.vm.synced_folder "themes/contrib/", "/var/www/drupal/sites/all/themes/", 
+  config.vm.synced_folder "themes/contrib/", "/var/www/drupal/sites/all/themes/",
     type: "rsync", rsync__args: ["--verbose", "--archive", "--archive", "-z"]
-  config.vm.synced_folder "themes/custom/", "/var/www/drupal/sites/all/themes/", 
+  config.vm.synced_folder "themes/custom/", "/var/www/drupal/sites/all/themes/",
     type: "rsync", rsync__args: ["--verbose", "--archive", "--archive", "-z"]
 
   # Apply puppet

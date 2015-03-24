@@ -28,9 +28,14 @@ file { '/var/www':
 # Grant read permissions on apache logs
 file { '/var/log/apache2':
   ensure => 'directory',
-  mode => 'a+r',
-  recurse => 'true',
-  require => Package['apache2']
+  mode => 'a+rx',
+  require => Package['apache2'],
+  notify => Exec['chmod-var-log-apache2']
+}
+exec { 'chmod-var-log-apache2':
+  command => 'chmod -R a+r /var/log/apache2',
+  path => '/bin:/sbin:/usr/bin:/usr/sbin',
+  refreshonly => true,
 }
 
 # Disable some default server-wide http settings
