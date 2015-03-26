@@ -1,4 +1,4 @@
-# A defined type to install drupal with drush
+# A class to install drupal with drush
 class drupal::site::install (
   $version = '7',
 ) {

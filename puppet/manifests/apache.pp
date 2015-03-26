@@ -47,6 +47,13 @@ apache::conf{'http-settings':}
 # Disable default site
 apache::site{'000-default': status => 'disabled' }
 
+# Add templated values into Apache config as "define" directives
+apache::conf{'define':}
+file{'/etc/apache2/conf-available/define.conf':
+  ensure => present,
+  content => template('/vagrant/puppet/templates/define.conf.erb'),
+}
+
 # Copy apache conf files in from /vagrant
 file { '/etc/apache2/conf-available':
   ensure => directory,

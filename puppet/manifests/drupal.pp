@@ -11,7 +11,7 @@ file{'/home/vagrant/.drush':
 }
 file{'/home/vagrant/.drush/drushrc.php':
   content => "<?php \
-  \$options[\"r\"] = \"${drupal_direcotry}\"; \
+  \$options[\"r\"] = \"${drupal_directory}\"; \
   \$options[\"l\"] = \"http://${website}\"; \
   ",
   owner => 'vagrant'
@@ -41,6 +41,14 @@ exec {'chown-drupal-files':
   path => '/bin:/sbin:/usr/bin:/usr/sbin',
 }
 
+# Install the database software and start it
+package{'mysql-server':}
+service{'mysql':
+  ensure => running,
+  enable => true,
+  require => Package['mysql-server']
+}
+
 # Enable Apache modules for Drupal
 apache::module{'php5':}
 apache::module{'ssl':}
@@ -52,6 +60,10 @@ php::module {'ldap':}
 php::module {'gd':}
 php::module {'imagick':}
 php::module {'json':}
+
+# Trust the SSL certs for snowldap and iceldap
+ssl::trustcert{'snowldap.colorado.edu': port => 636 }
+ssl::trustcert{'iceldap.colorado.edu':  port => 636 }
 
 # Enable drupal apache site
 apache::site{'drupal':}
@@ -82,5 +94,12 @@ if $environment == 'local' {
   include drupal::site::install
 } else {
   include drupal::site::restore
+}
+
+# Mount the drupal apps share
+include nsidc_nfs
+nsidc_nfs::sharemount{'/apps/drupal':
+  project => 'apps',
+  share => 'drupal'
 }
 

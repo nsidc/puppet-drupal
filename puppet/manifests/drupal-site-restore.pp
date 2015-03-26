@@ -1,4 +1,4 @@
-# A defined type to restore a drupal site with drush
+# A class to restore a drupal site with drush
 class drupal::site::restore (
   $website = hiera('website'),
 ) {
