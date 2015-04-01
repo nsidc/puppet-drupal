@@ -1,0 +1,15 @@
+# Classes to get drupal going
+classes:
+  - php
+  - drupal
+  - drupal::apache
+  - drupal::mysql
+  - drupal::php
+  - drupal::site
+
+# Restore a backup by default. Set this to false in an environment to disable site restore.
+drupal::site::restore: /apps/drupal/backups/archive-dump/%{hiera('website')}-latest.tar.gz
+
+# Pass "-y" to php class installation options (works around bug in puppet-php)
+php::install_options: -y
+

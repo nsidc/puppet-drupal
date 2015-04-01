@@ -1,5 +1,5 @@
 # A defined type to enable an apache site (Debian style)
-define apache::site ($site = $title, $status = 'enabled') {
+define drupal::apache::site ($site = $title, $status = 'enabled') {
   if $status == 'enabled' {
     exec { "a2ensite ${site}":
       creates => "/etc/apache2/sites-enabled/${site}.conf",

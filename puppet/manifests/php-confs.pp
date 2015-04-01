@@ -1,5 +1,5 @@
 # Create a defined type to enable a php conf
-define nsidc::php::conf ($conf = $title, $status = 'enabled', $sapi = 'apache2', $priority = '99') {
+define drupal::php::conf ($conf = $title, $status = 'enabled', $sapi = 'apache2', $priority = '99') {
   if $status == 'enabled' {
     exec { "php5enmod ${conf}":
       creates => "/etc/php5/${sapi}/conf.d/${priority}-${conf}.ini",

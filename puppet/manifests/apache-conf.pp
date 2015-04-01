@@ -1,5 +1,5 @@
 # A defined type to enable an apache conf
-define apache::conf ($conf = $title, $status = 'enabled') {
+define drupal::apache::conf ($conf = $title, $status = 'enabled') {
   if $status == 'enabled' {
     exec { "a2enconf ${conf}":
       creates => "/etc/apache2/conf-enabled/${conf}.conf",

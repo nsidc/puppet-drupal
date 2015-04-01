@@ -1,6 +1,6 @@
 # Add the ssl certificate for the server and port to the ca-certificates file 
 # this makes us always trust the certificate
-define ssl::trustcert ($hostname=$title, $port=443) {
+define drupal::ssl::trustcert ($hostname=$title, $port=443) {
   exec {"openssl-get-certificate-${hostname}":
    command => "echo -n | \
       openssl s_client -connect ${hostname}:${port} | \

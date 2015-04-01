@@ -1,5 +1,5 @@
 # A defined type to enable an apache module (Debian style)
-define apache::module ($module = $title, $status = 'enabled') {
+define drupal::apache::module ($module = $title, $status = 'enabled') {
   if $status == 'enabled' {
     exec { "a2enmod ${module}":
       creates => "/etc/apache2/mods-enabled/${module}.load",

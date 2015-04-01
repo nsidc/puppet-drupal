@@ -1,105 +1,72 @@
-# Load website name from hiera
-$website = hiera('website')
+# A class to install drupal (or only drush)
+class drupal(
+  $install = false,
+  $version = 7,
+  $drupal_parent_directory = '/var/www',
+) {
 
-# Installation directory for drupal
-$drupal_directory = '/var/www/drupal'
+  # Install drush (and dependencies) with pear
+  php::pear::module { 'drush':
+    repository  => 'pear.drush.org',
+    use_package  => false,
+    require => [
+      Php::Pear::Module['Console_Table'],
+      Php::Pear::Module['PEAR']
+    ]
+  }
+  php::pear::module { 'Console_Table':
+    use_package  => false,
+  }
+  php::pear::module { 'PEAR':
+    use_package  => false,
+  }
 
-# Setup drush config file for the vagrant user
-file{'/home/vagrant/.drush':
-  ensure => directory,
-  owner => 'vagrant'
-}
-file{'/home/vagrant/.drush/drushrc.php':
-  content => "<?php \
-  \$options[\"r\"] = \"${drupal_directory}\"; \
-  \$options[\"l\"] = \"http://${website}\"; \
-  ",
-  owner => 'vagrant'
-}
+  # Setup drush config file for the vagrant user
+  file{'/home/vagrant/.drush':
+    ensure => directory,
+    owner => 'vagrant'
+  }
+  file{'/home/vagrant/.drush/drushrc.php':
+    content => "<?php \
+    \$options[\"r\"] = \"${drupal_parent_directory}/drupal\"; \
+    ",
+    owner => 'vagrant'
+  }
 
-# Set files and private-files to be owned by www-data (default web user)
-# Use chown because puppet file recursion can take a long time with many files
-file { "${drupal_directory}/sites/${website}/files":
-  ensure => 'directory',
-  owner => 'www-data',
-  group => 'www-data',
-  require => Package['apache2'],
-  notify => Exec['chown-drupal-files'],
-}
-file { "${drupal_directory}/sites/${website}/private-files":
-  ensure => 'directory',
-  owner => 'www-data',
-  group => 'www-data',
-  require => Package['apache2'],
-  notify => Exec['chown-drupal-files'],
-}
-exec {'chown-drupal-files':
-  command => "chown -Rh www-data:www-data \
-    ${drupal_directory}/sites/${website}/files \
-    ${drupal_directory}/sites/${website}/private-files",
-  refreshonly => true,
-  path => '/bin:/sbin:/usr/bin:/usr/sbin',
-}
+  # Use drush to install drupal
+  if $install {
 
-# Install the database software and start it
-package{'mysql-server':}
-service{'mysql':
-  ensure => running,
-  enable => true,
-  require => Package['mysql-server']
-}
+    # Install drupal7 with drush
+    exec{'drush-download-drupal':
+      command => "yes | drush pm-download \
+        --verbose \
+        --drupal-project-rename drupal \
+        --destination=${drupal_parent_directory} \
+        drupal-${version}
+      ",
+      user => 'vagrant',
+      provider => shell,
+      creates => "${drupal_parent_directory}/drupal/index.php",
+      notify => Exec['drush-site-install-default'],
+      path => '/bin:/sbin:/usr/bin:/usr/sbin',
+      require => PHP::Pear::Module['drush']
+    }
 
-# Enable Apache modules for Drupal
-apache::module{'php5':}
-apache::module{'ssl':}
-apache::module{'rewrite':}
+    # Do a standard site installation with all defaults
+    exec{'drush-site-install-default':
+      command => 'yes | drush site-install standard \
+        --verbose \
+        --account-name=admin \
+        --account-pass=admin \
+        --db-url=mysql://root@localhost/drupal',
+      cwd => "${drupal_parent_directory}/drupal",
+      user => 'vagrant',
+      provider => shell,
+      path => '/bin:/sbin:/usr/bin:/usr/sbin',
+      require => PHP::Pear::Module['drush'],
+      refreshonly => true,
+    }
+  }
 
-# Install PHP Modules needed for Drupal
-php::module {'mysql':}
-php::module {'ldap':}
-php::module {'gd':}
-php::module {'imagick':}
-php::module {'json':}
-
-# Trust the SSL certs for snowldap and iceldap
-ssl::trustcert{'snowldap.colorado.edu': port => 636 }
-ssl::trustcert{'iceldap.colorado.edu':  port => 636 }
-
-# Enable drupal apache site
-apache::site{'drupal':}
-
-# Enable drupal php config
-nsidc::php::conf{'drupal': 
-  priority => '99',
-}
-
-# Install drush (and dependencies) with pear
-php::pear::module { 'drush':
-  repository  => 'pear.drush.org',
-  use_package  => false,
-  require => [ 
-    Php::Pear::Module['Console_Table'],
-    Php::Pear::Module['PEAR']
-  ]
-}
-php::pear::module { 'Console_Table':
-  use_package  => false,
-}
-php::pear::module { 'PEAR':
-  use_package  => false,
-}
-
-# Use drush to install a new drupal or restore an old drupal
-if $environment == 'local' {
-  include drupal::site::install
-} else {
-  include drupal::site::restore
-}
-
-# Mount the drupal apps share
-include nsidc_nfs
-nsidc_nfs::sharemount{'/apps/drupal':
-  project => 'apps',
-  share => 'drupal'
 }
 

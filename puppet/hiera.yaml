@@ -3,6 +3,7 @@
   :datadir: .
 :hierarchy:
   - "puppet/%{environment}"
+  - puppet/drupal
   - puppet/hiera
   - scm_creds
   - vagrant-nsidc
