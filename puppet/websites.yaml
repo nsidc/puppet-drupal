@@ -1,0 +1,7 @@
+classes:
+  - drupal
+
+drupal::install: yes
+drupal::sites: 
+  localhost: {}
+

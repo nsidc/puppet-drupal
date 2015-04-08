@@ -1,3 +1,0 @@
-drupal::install: yes
-drupal::site::restore: no
-
