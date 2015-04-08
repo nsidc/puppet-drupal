@@ -9,9 +9,9 @@
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [ "12.04", "14.04" ]
-    },
+    }
   ],
   "dependencies": [
-    { "name": "example42-php" },
+    { "name": "example42-php" }
   ]
 }
