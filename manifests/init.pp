@@ -61,32 +61,9 @@ class drupal(
       user => 'vagrant',
       provider => shell,
       creates => "${drupal_parent_directory}/drupal/index.php",
-      notify => Exec['drush-site-install-default'],
       path => '/bin:/sbin:/usr/bin:/usr/sbin',
       require => PHP::Pear::Module['drush']
     }
-
-    # Do a standard site installation with all defaults
-    exec{'drush-site-install-default':
-      command => 'yes | drush site-install standard \
-        --verbose \
-        --account-name=admin \
-        --account-pass=admin \
-        --db-url=mysql://root@localhost/drupal',
-      cwd => "${drupal_parent_directory}/drupal",
-      user => 'vagrant',
-      provider => shell,
-      path => '/bin:/sbin:/usr/bin:/usr/sbin',
-      require => PHP::Pear::Module['drush'],
-      refreshonly => true,
-    }
   }
-
-  # Finish setting up the site with puppet
-  drupal::site{'default':
-    default => false,
-    require => Exec['drush-site-install-default']
-  }
-
 }
 

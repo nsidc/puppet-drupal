@@ -5,5 +5,5 @@ drupal::install: yes
 
 drupal::sites: 
   localhost:
-    default: false
+    create: true
 

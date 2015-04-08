@@ -1,7 +1,8 @@
-# A class to setup a drupal site
+# A defined type to setup a drupal site
 define drupal::site (
   $website = $title,
   $restore = undef,
+  $create = undef,
   $drupal_parent_directory = '/var/www',
   $default = true,
 ) {
@@ -51,12 +52,36 @@ define drupal::site (
     }
   }
 
-  # Use drush to restore the site
-  if $restore {
+  if $create {
 
-    # Restore parameter is a filename
+    # Use drush to create the site
+    exec{"drush-site-install-${website}":
+      command => "yes | drush site-install standard \
+        --verbose \
+        --site-name=${website} \
+        --sites-subdir=${website} \
+        --account-name=admin \
+        --account-pass=admin \
+        --db-url=mysql://root@localhost/drupal",
+      cwd => "${drupal_parent_directory}/drupal",
+      user => 'vagrant',
+      provider => shell,
+      path => '/bin:/sbin:/usr/bin:/usr/sbin',
+      require => PHP::Pear::Module['drush'],
+      creates => "${drupal_parent_directory}/drupal/sites/${website}/settings.php",
+      notify => [
+        File["public-files-${website}"],
+        File["private-files-${website}"],
+        File["defaultsite-${website}"],
+      ]
+    }
+
+  } elsif $restore {
+
+    # Get filename from restore parameter
     file{"${restore}": }
 
+    # Use drush to restore the site
     exec{"drush-archive-restore-${website}":
       command => "drush archive-restore \
         --destination=${drupal_parent_directory}/drupal \
@@ -77,6 +102,5 @@ define drupal::site (
       ]
     }
   }
-
 }
 
