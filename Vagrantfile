@@ -10,6 +10,9 @@ Vagrant.configure(2) do |config|
   # Sync /vagrant (change default behavior to explicitly use rsync )
   config.vm.synced_folder ".", "/vagrant", type: "rsync"
 
+  # Symlink /vagrant into the puppet modules folder so it can be loaded like a module
+  config.vm.provision "shell", inline: "mkdir -p /vagrant-nsidc-puppet; ln -sf /vagrant /vagrant-nsidc-puppet/drupal"
+
   # Sync modules
   config.vm.synced_folder "modules/contrib/", "/var/www/drupal/sites/all/modules/contrib/", type: "rsync"
   config.vm.synced_folder "modules/custom/", "/var/www/drupal/sites/all/modules/custom/", type: "rsync"

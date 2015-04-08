@@ -1,0 +1,17 @@
+{
+  "name": "nsidc-drupal",
+  "version": "0.0.1",
+  "author": "NSIDC",
+  "license": "NSIDC",
+  "summary": "A module to manage drupal.",
+  "source": "https://bitbucket.org/nsidc/puppet-drupal",
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [ "12.04", "14.04" ]
+    },
+  ],
+  "dependencies": [
+    { "name": "example42-php" },
+  ]
+}

@@ -1,7 +1,6 @@
 ---
-project: drupal
-gitrepo: git@bitbucket.org:nsidc/drupal.git
-website: nsidc.org
+project: puppet-drupal
+gitrepo: git@bitbucket.org:nsidc/puppet-drupal.git
 
 vsphere:
   template: trusty64-nsidc
@@ -12,8 +11,8 @@ puppet:
   enabled: true
   execution_dir: /vagrant
   apply:
-    options: --debug --verbose --detailed-exitcodes --modulepath=./puppet/modules
-      --hiera_config=./puppet/hiera.yaml
+    options: --debug --verbose --detailed-exitcodes --hiera_config=./puppet/hiera.yaml
+      --modulepath=./puppet/modules:/vagrant-nsidc-puppet
     manifest: ./puppet/manifests
   librarian:
     puppetfile: ./puppet/Puppetfile
