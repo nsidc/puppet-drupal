@@ -1,3 +1,8 @@
+# Load puppet options from vagrant-nsidc.yaml
+$puppet = hiera_hash('puppet')
+$puppet_options = $puppet['apply']['options']
+$puppet_manifest = $puppet['apply']['manifest']
+
 # Load modules and classes
 hiera_include('classes')
 

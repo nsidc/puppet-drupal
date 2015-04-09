@@ -1,6 +1,7 @@
 ---
 project: puppet-drupal
 gitrepo: git@bitbucket.org:nsidc/puppet-drupal.git
+gitbranch: master
 
 vsphere:
   template: trusty64-nsidc
