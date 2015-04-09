@@ -64,11 +64,18 @@ nsidc_jenkins::jobs:
       rake spec:integration
     workspace: "/var/lib/jenkins/workspace-%{hiera('project')}-%{hiera('gitbranch')}"
 
-  # If your project builds a package, these jobs provide a template for the
-  # release pipeline for your package. Just replace the commented-out rake
-  # commands with your own project's task runner.
-  "Project_%{hiera('project')}_Release_1_Bump_Version_and_Tag":
+
+
+  # The rest of the jobs are for performing a release.
+  "%{hiera('project')}_Release_1_Bump_Version_and_Tag":
+    git:
+      repo: "%{hiera('gitrepo')}"
+      poll_scm: false
     parameters:
+      - type: string
+        name: branch
+        description: git branch to checkout and tag
+        default: master
       - type: choice
         name: version_type
         choices:
@@ -76,24 +83,21 @@ nsidc_jenkins::jobs:
           - minor
           - major
     command: |
-      rm -rf gitrepo
-      git clone %{hiera('gitrepo')} gitrepo
-      cd gitrepo
-      bumpversion $version_type
-    workspace: "/var/lib/jenkins/workspace-%{hiera('project')}-release"
-    trigger_job: "Project_%{hiera('project')}_Release_2_Build_Package"
+      git checkout $branch
+      rake bump[$version_type]
+      git push origin master --tags
+    workspace: /var/lib/jenkins/workspaces/%{hiera('project')}/release
+    trigger_job: "%{hiera('project')}_Release_2_Publish_Latest"
 
-  "Project_%{hiera('project')}_Release_2_Build_Package":
-    command: 
-    workspace: "/var/lib/jenkins/workspace-%{hiera('project')}-release/gitrepo"
-    trigger_job: "Project_%{hiera('project')}_Release_3_Publish_Package"
-
-  "Project_%{hiera('project')}_Release_3_Publish_Package":
+  # This job is expecting that you have pushed up a branch called
+  # latest to the repo.  The latest branch can be referenced with the
+  # :ref => 'latest' option when calling the module in the consumer's Puppetfile.
+  "%{hiera('project')}_Release_2_Publish_Latest":
     command: |
-    workspace: "/var/lib/jenkins/workspace-%{hiera('project')}-release/gitrepo"
-    trigger_job: "Project_%{hiera('project')}_Release_4_Push_to_Git"
-
-  "Project_%{hiera('project')}_Release_4_Push_to_Git":
-    command: "git push origin master --tags"
-    workspace: "/var/lib/jenkins/workspace-%{hiera('project')}-release/gitrepo"
+      git fetch origin latest
+      git checkout latest
+      git pull
+      git merge master
+      git push origin latest
+    workspace: /var/lib/jenkins/workspaces/%{hiera('project')}/release
 
