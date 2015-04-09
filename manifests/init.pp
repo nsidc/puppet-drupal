@@ -3,6 +3,7 @@ class drupal(
   $install = false,
   $version = 7,
   $drupal_parent_directory = '/var/www',
+  $drupal_user = 'www-data'
 ) {
 
   # Load several puppet classes to setup the LAMP stack for Drupal
@@ -33,6 +34,12 @@ class drupal(
   }
   php::pear::module { 'PEAR':
     use_package  => false,
+  }
+
+  # Setup drush alias for the vagrant user
+  file{'/home/vagrant/.bash_aliases':
+    content => "alias drush=\"sudo -u ${drupal_user}\"",
+    owner => 'vagrant'
   }
 
   # Setup drush config file for the vagrant user

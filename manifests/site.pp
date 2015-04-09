@@ -4,6 +4,7 @@ define drupal::site (
   $restore = undef,
   $create = undef,
   $drupal_parent_directory = '/var/www',
+  $drupal_user = 'www-data'
   $default = true,
   $enabled = true,
 ) {
@@ -19,27 +20,26 @@ define drupal::site (
       creates => "${drupal_parent_directory}/drupal/sites/${website}/files",
       path => '/bin:/sbin:/usr/bin:/usr/sbin',
     }
-    # Set public files to be owned by www-data (default web user)
+    # Set public files to be owned by the user drupal runs as
     file { "public-files-${website}":
       path => "${drupal_parent_directory}/drupal/sites/${website}/files",
       ensure => 'directory',
-      owner => 'www-data',
-      group => 'www-data',
+      owner => $drupal_user,
       require => [ Package['apache2'], Exec["mkdir-drupal-files-${website}"] ],
       notify => Exec["chown-drupal-files-${website}"],
     }
-    # Set private files to be owned by www-data (default web user)
+    # Set private files to be owned by the user drupal runs as
     file { "private-files-${website}":
       path => "${drupal_parent_directory}/drupal/sites/${website}/private-files",
       ensure => 'directory',
-      owner => 'www-data',
+      owner => $drupal_user,
       group => 'www-data',
       require => [ Package['apache2'], Exec["mkdir-drupal-files-${website}"] ],
       notify => Exec["chown-drupal-files-${website}"],
     }
     # Use chown because puppet file recursion can take a long time with many files
     exec {"chown-drupal-files-${website}":
-      command => "chown -Rh www-data:www-data \
+      command => "chown -Rh ${drupal_user} \
         ${drupal_parent_directory}/drupal/sites/${website}/files \
         ${drupal_parent_directory}/drupal/sites/${website}/private-files",
       refreshonly => true,
