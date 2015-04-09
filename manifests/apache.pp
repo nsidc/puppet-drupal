@@ -24,7 +24,7 @@ class drupal::apache() {
     ensure => 'directory',
     owner => 'vagrant',
     group => 'vagrant',
-    recurse => 'true',
+    recurse => true,
     require => Package['apache2']
   }
 

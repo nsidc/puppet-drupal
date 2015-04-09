@@ -2,7 +2,7 @@
 # this makes us always trust the certificate
 define drupal::ssl::trustcert ($hostname=$title, $port=443) {
   exec {"openssl-get-certificate-${hostname}":
-   command => "echo -n | \
+    command => "echo -n | \
       openssl s_client -connect ${hostname}:${port} | \
       sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' \
       > /usr/local/share/ca-certificates/${hostname}.crt",

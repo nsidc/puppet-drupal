@@ -37,7 +37,8 @@ define drupal::site (
       require => [ Package['apache2'], Exec["mkdir-drupal-files-${website}"] ],
       notify => Exec["chown-drupal-files-${website}"],
     }
-    # Use chown because puppet file recursion can take a long time with many files
+    # Use chown because puppet file recursion
+    # can take a long time with many files
     exec {"chown-drupal-files-${website}":
       command => "chown -Rh ${drupal_user} \
         ${drupal_parent_directory}/drupal/sites/${website}/files \
@@ -81,7 +82,7 @@ define drupal::site (
 
     } elsif $restore {
       # Get filename from restore parameter
-      file{"${restore}": }
+      file{$restore:}
       # Use drush to restore the site
       exec{"drush-archive-restore-${website}":
         command => "drush archive-restore \
