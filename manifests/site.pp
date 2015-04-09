@@ -15,6 +15,7 @@ define drupal::site (
     user => 'vagrant',
     creates => "${drupal_parent_directory}/drupal/sites/${website}/files",
     path => '/bin:/sbin:/usr/bin:/usr/sbin',
+    require => File['/var/www'],
   }
   # Set public files to be owned by www-data (default web user)
   file { "public-files-${website}":
