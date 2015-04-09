@@ -12,6 +12,7 @@ define drupal::site (
     command => "mkdir -p \
       ${drupal_parent_directory}/drupal/sites/${website}/files \
       ${drupal_parent_directory}/drupal/sites/${website}/private-files",
+    user => 'vagrant',
     creates => "${drupal_parent_directory}/drupal/sites/${website}/files",
     path => '/bin:/sbin:/usr/bin:/usr/sbin',
   }
