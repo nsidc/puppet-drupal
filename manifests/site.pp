@@ -4,7 +4,7 @@ define drupal::site (
   $restore = undef,
   $create = undef,
   $drupal_parent_directory = '/var/www',
-  $drupal_user = 'www-data'
+  $drupal_user = 'www-data',
   $default = true,
   $enabled = true,
 ) {
