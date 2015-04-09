@@ -1,5 +1,6 @@
 # Puppet CI Resources
 
+# Load puppet modules
 classes:
   - nsidc_jenkins
 
@@ -20,51 +21,54 @@ nsidc_jenkins::plugins:
 
 # Jenkins Jobs
 nsidc_jenkins::jobs:
-  "%{hiera('project')}_1_Checkout_Project":
+  # clone the project into the shared workspace
+  "Project_%{hiera('project')}_Branch_%{hiera('gitbranch')}_1_Checkout_Project":
     git:
       repo: "%{hiera('gitrepo')}"
-      # branches: "*/NAME-OF-FEATURE-BRANCH"
-      # checkout_local: "NAME-OF-FEATURE-BRANCH"
-    workspace: /var/lib/jenkins/workspaces/%{hiera('project')}/master
-    trigger_job: "%{hiera('project')}_2_Configure_System"
-  "%{hiera('project')}_2_Configure_System":
+      branches: "*/%{hiera('gitbranch')}"
+      checkout_local: "%{hiera('gitbranch')}"
+      poll_scm: true
+    workspace: "/var/lib/jenkins/workspace-%{hiera('project')}-%{hiera('gitbranch')}"
+    trigger_job: "Project_%{hiera('project')}_Branch_%{hiera('gitbranch')}_2_Configure_System"
+
+  # use puppet to install system dependencies, such as Bundler
+  "Project_%{hiera('project')}_Branch_%{hiera('gitbranch')}_2_Configure_System":
     command: |
+      #!/bin/bash -x
       cd puppet
-      librarian-puppet clean
-      librarian-puppet install
+      librarian-puppet clean || exit 1
+      librarian-puppet update || exit 1
       cd -
-     
       # with the --detailed-exitcodes flag, exit code of 2 means that changes
       # were made, i.e., puppet did stuff to your system like it's supposed to
       #
       # https://docs.puppetlabs.com/references/3.4.latest/man/agent.html
-      bash -c "sudo puppet apply --environment=ci --debug --verbose --detailed-exitcodes --modulepath=./puppet/modules:/vagrant-local-jenkins --hiera_config=./puppet/hiera.yaml ./puppet/site.pp; puppet_exit=\$?; echo puppet exit code = \$puppet_exit; if [ \"\$puppet_exit\" = \"2\" ]; then exit 0; else exit \$puppet_exit; fi" 
+      sudo puppet apply --environment=ci %{::puppet_options} %{::puppet_manifest}
+      (( $? == 0 || $? == 2 )) || exit 1
+    workspace: "/var/lib/jenkins/workspace-%{hiera('project')}-%{hiera('gitbranch')}"
+    trigger_job: "Project_%{hiera('project')}_Branch_%{hiera('gitbranch')}_3_Make"
 
-    workspace: /var/lib/jenkins/workspaces/%{hiera('project')}/master
-    trigger_job: "%{hiera('project')}_3_Check_Syntax"
-  "%{hiera('project')}_3_Check_Syntax":
+  "Project_%{hiera('project')}_Branch_%{hiera('gitbranch')}_3_Check_Syntax":
     command: rake lint
-    workspace: /var/lib/jenkins/workspaces/%{hiera('project')}/master
-    trigger_job: "%{hiera('project')}_4_Run_Unit_Tests"
-  "%{hiera('project')}_4_Run_Unit_Tests":
+    workspace: "/var/lib/jenkins/workspace-%{hiera('project')}-%{hiera('gitbranch')}"
+    trigger_job: "Project_%{hiera('project')}_Branch_%{hiera('gitbranch')}_4_Make_Install"
+
+  "Project_%{hiera('project')}_Branch_%{hiera('gitbranch')}_4_Run_Unit_Tests":
     command: rake spec:unit
-    workspace: /var/lib/jenkins/workspaces/%{hiera('project')}/master
-    trigger_job: "%{hiera('project')}_5_Run_Acceptance_Tests"
-  "%{hiera('project')}_5_Run_Acceptance_Tests":
+    workspace: "/var/lib/jenkins/workspace-%{hiera('project')}-%{hiera('gitbranch')}"
+    trigger_job: "Project_%{hiera('project')}_Branch_%{hiera('gitbranch')}_5_Make_Package"
+
+  "Project_%{hiera('project')}_Branch_%{hiera('gitbranch')}_5_Run_Integration_Tests":
     command: |
       set +e; vagrant nsidc hijack --env=integration; set -e
-      rake spec:acceptance
-    workspace: /var/lib/jenkins/workspaces/%{hiera('project')}/master
+      rake spec:integration
+    workspace: "/var/lib/jenkins/workspace-%{hiera('project')}-%{hiera('gitbranch')}"
 
-  "%{hiera('project')}_Release_1_Bump_Version_and_Tag":
-    git:
-      repo: "%{hiera('gitrepo')}"
-      poll_scm: false
+  # If your project builds a package, these jobs provide a template for the
+  # release pipeline for your package. Just replace the commented-out rake
+  # commands with your own project's task runner.
+  "Project_%{hiera('project')}_Release_1_Bump_Version_and_Tag":
     parameters:
-      - type: string
-        name: branch
-        description: git branch to checkout and tag
-        default: master
       - type: choice
         name: version_type
         choices:
@@ -72,20 +76,29 @@ nsidc_jenkins::jobs:
           - minor
           - major
     command: |
-      git checkout $branch
-      rake bump[$version_type]
-      git push origin master --tags
-    workspace: /var/lib/jenkins/workspaces/%{hiera('project')}/release
-    trigger_job: "%{hiera('project')}_Release_2_Publish_Latest"
+      rm -rf gitrepo
+      git clone %{hiera('gitrepo')} gitrepo
+      cd gitrepo
+      bumpversion $version_type
+    workspace: "/var/lib/jenkins/workspace-%{hiera('project')}-release"
+    trigger_job: "Project_%{hiera('project')}_Release_2_Build_Package"
 
-  # This job is expecting that you have pushed up a branch called
-  # latest to the repo.  The latest branch can be referenced with the
-  # :ref => 'latest' option when calling the module in the consumer's Puppetfile.
-  "%{hiera('project')}_Release_2_Publish_Latest":
+  "Project_%{hiera('project')}_Release_2_Build_Package":
+    command: make package DESTDIR=$PWD/installdir
+    workspace: "/var/lib/jenkins/workspace-%{hiera('project')}-release/gitrepo"
+    trigger_job: "Project_%{hiera('project')}_Release_3_Publish_Package"
+
+  "Project_%{hiera('project')}_Release_3_Publish_Package":
     command: |
-      git fetch origin latest
-      git checkout latest
-      git pull
-      git merge master
-      git push origin latest
-    workspace: /var/lib/jenkins/workspaces/%{hiera('project')}/release
+      cd /share/sw/packages/UBUNTU_1404/nsidc/
+      sudo -u vagrant cp -v ${WORKSPACE}/*.deb .
+      sudo -u vagrant cp Packages Packages.backup
+      sudo -u vagrant sh -c 'apt-ftparchive packages . > Packages.new'
+      sudo -u vagrant mv Packages.new Packages
+    workspace: "/var/lib/jenkins/workspace-%{hiera('project')}-release/gitrepo"
+    trigger_job: "Project_%{hiera('project')}_Release_4_Push_to_Git"
+
+  "Project_%{hiera('project')}_Release_4_Push_to_Git":
+    command: "git push origin master --tags"
+    workspace: "/var/lib/jenkins/workspace-%{hiera('project')}-release/gitrepo"
+

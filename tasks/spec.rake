@@ -5,7 +5,7 @@
 # Using rescue logic in this method will make sure that every test
 # runs instead of failing the suite of tests prematurely if even one test
 # fails.
-def acceptance_test(test_sym, failed_tests)
+def integration_test(test_sym, failed_tests)
   yield
 rescue
   failed_tests << test_sym
@@ -24,8 +24,8 @@ namespace :spec do
     sh 'rm -f spec/fixtures/modules/drupal' # vagrant uses rsync --copy-links...
   end
 
-  desc "Run acceptance tests"
-  task :acceptance do
+  desc "Run integration tests"
+  task :integration do
     # These commands aren't part of the test, just doing cleanup and setup.
     sh  'sudo rm -rf ./puppet/.librarian ./puppet/.tmp ./puppet/Puppetfile.lock' # Clean out install garbage
 
@@ -36,8 +36,8 @@ namespace :spec do
 
     failed_tests = []
 
-    tests.each { |test_sym, test_proc| acceptance_test(test_sym, failed_tests) { test_proc.call } }
+    tests.each { |test_sym, test_proc| integration_test(test_sym, failed_tests) { test_proc.call } }
 
-    fail "The following acceptance tests did not pass: #{ failed_tests.join(', ') }" unless failed_tests.size == 0
+    fail "The following integration tests did not pass: #{ failed_tests.join(', ') }" unless failed_tests.size == 0
   end
 end
