@@ -87,7 +87,7 @@ nsidc_jenkins::jobs:
       rake bump[$version_type]
       git push origin master --tags
     workspace: /var/lib/jenkins/workspaces/%{hiera('project')}/release
-    trigger_job: "%{hiera('project')}_Release_2_Publish_Latest"
+    trigger_job: "Product_%{hiera('project')}_Release_2_Publish_Latest"
 
   # This job is expecting that you have pushed up a branch called
   # latest to the repo.  The latest branch can be referenced with the
