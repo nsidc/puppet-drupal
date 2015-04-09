@@ -5,7 +5,7 @@ define drupal::site (
   $create = undef,
   $drupal_parent_directory = '/var/www',
   $drupal_user = 'www-data',
-  $default = true,
+  $default = false,
   $enabled = true,
 ) {
 
