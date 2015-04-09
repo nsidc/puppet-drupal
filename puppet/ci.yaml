@@ -46,17 +46,17 @@ nsidc_jenkins::jobs:
       sudo puppet apply --environment=ci %{::puppet_options} %{::puppet_manifest}
       (( $? == 0 || $? == 2 )) || exit 1
     workspace: "/var/lib/jenkins/workspace-%{hiera('project')}-%{hiera('gitbranch')}"
-    trigger_job: "Project_%{hiera('project')}_Branch_%{hiera('gitbranch')}_3_Make"
+    trigger_job: "Project_%{hiera('project')}_Branch_%{hiera('gitbranch')}_3_Check_Syntax"
 
   "Project_%{hiera('project')}_Branch_%{hiera('gitbranch')}_3_Check_Syntax":
     command: rake lint
     workspace: "/var/lib/jenkins/workspace-%{hiera('project')}-%{hiera('gitbranch')}"
-    trigger_job: "Project_%{hiera('project')}_Branch_%{hiera('gitbranch')}_4_Make_Install"
+    trigger_job: "Project_%{hiera('project')}_Branch_%{hiera('gitbranch')}_4_Run_Unit_Tests"
 
   "Project_%{hiera('project')}_Branch_%{hiera('gitbranch')}_4_Run_Unit_Tests":
     command: rake spec:unit
     workspace: "/var/lib/jenkins/workspace-%{hiera('project')}-%{hiera('gitbranch')}"
-    trigger_job: "Project_%{hiera('project')}_Branch_%{hiera('gitbranch')}_5_Make_Package"
+    trigger_job: "Project_%{hiera('project')}_Branch_%{hiera('gitbranch')}_5_Run_Integration_Tests"
 
   "Project_%{hiera('project')}_Branch_%{hiera('gitbranch')}_5_Run_Integration_Tests":
     command: |
@@ -84,17 +84,12 @@ nsidc_jenkins::jobs:
     trigger_job: "Project_%{hiera('project')}_Release_2_Build_Package"
 
   "Project_%{hiera('project')}_Release_2_Build_Package":
-    command: make package DESTDIR=$PWD/installdir
+    command: 
     workspace: "/var/lib/jenkins/workspace-%{hiera('project')}-release/gitrepo"
     trigger_job: "Project_%{hiera('project')}_Release_3_Publish_Package"
 
   "Project_%{hiera('project')}_Release_3_Publish_Package":
     command: |
-      cd /share/sw/packages/UBUNTU_1404/nsidc/
-      sudo -u vagrant cp -v ${WORKSPACE}/*.deb .
-      sudo -u vagrant cp Packages Packages.backup
-      sudo -u vagrant sh -c 'apt-ftparchive packages . > Packages.new'
-      sudo -u vagrant mv Packages.new Packages
     workspace: "/var/lib/jenkins/workspace-%{hiera('project')}-release/gitrepo"
     trigger_job: "Project_%{hiera('project')}_Release_4_Push_to_Git"
 
