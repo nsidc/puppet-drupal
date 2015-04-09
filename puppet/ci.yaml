@@ -67,7 +67,7 @@ nsidc_jenkins::jobs:
 
 
   # The rest of the jobs are for performing a release.
-  "%{hiera('project')}_Release_1_Bump_Version_and_Tag":
+  "Project_%{hiera('project')}_Release_1_Bump_Version_and_Tag":
     git:
       repo: "%{hiera('gitrepo')}"
       poll_scm: false
@@ -92,7 +92,7 @@ nsidc_jenkins::jobs:
   # This job is expecting that you have pushed up a branch called
   # latest to the repo.  The latest branch can be referenced with the
   # :ref => 'latest' option when calling the module in the consumer's Puppetfile.
-  "%{hiera('project')}_Release_2_Publish_Latest":
+  "Project_%{hiera('project')}_Release_2_Publish_Latest":
     command: |
       git fetch origin latest
       git checkout latest
