@@ -76,7 +76,6 @@ define drupal::site (
         notify => [
           File["public-files-${website}"],
           File["private-files-${website}"],
-          File["defaultsite-${website}"],
         ]
       }
 
