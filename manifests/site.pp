@@ -48,7 +48,7 @@ define drupal::site (
     }
 
     # Use a symlink to point the "default" site to this site
-    if $default {
+    if $enabled == 'default' {
       file { "defaultsite-${website}":
         ensure => link,
         path => "${drupal_parent_directory}/drupal/sites/default",
