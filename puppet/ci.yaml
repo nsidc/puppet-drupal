@@ -66,7 +66,8 @@ nsidc_jenkins::jobs:
 
 
 
-  # The rest of the jobs are for performing a release.
+  # Jobs for performing a release.
+
   "Project_%{hiera('project')}_Release_1_Bump_Version_and_Tag":
     git:
       repo: "%{hiera('gitrepo')}"
@@ -100,4 +101,34 @@ nsidc_jenkins::jobs:
       git merge master
       git push origin latest
     workspace: /var/lib/jenkins/workspaces/%{hiera('project')}/release
+
+
+  # Jobs for destroying machines
+
+  "Project_%{hiera('project')}_Destroy_VMs":
+    git:
+      repo: "%{hiera('gitrepo')}"
+
+    workspace: /var/lib/jenkins/workspaces/%{hiera('project')}/cleanup
+    description: cleanup project (destroy all the machines)
+    command: |
+
+      # note that all commands (even if they fail) will eval to true
+      #
+      # this allows ALL environments to be cleaned up if one doesnt
+      # exist
+      #
+      # you should monitor the output of this job for real errors
+
+      # cleanup, hijack, destroy
+      rm -rf .vagrant-integration
+      (vagrant nsidc hijack --env=integration || true)
+      (vagrant nsidc destroy --env=integration || true)
+
+      # notify the user to do the following on completion
+      echo 'when this job completes you will need to manually destroy ci'
+      echo 'from your local machine (in the project source directory'
+      echo '  >>  rm -rf .vagrant-ci'
+      echo '  >>  vagrant nsidc hijack --env=ci'
+      echo '  >>  vagrant nsidc destroy --env=ci'
 
