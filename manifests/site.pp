@@ -68,7 +68,9 @@ define drupal::site (
         force => true,
       }
     } else {
-      file { "defaultsite-${website}": }
+      file { "defaultsite-${website}":
+        path => "${drupal_parent_directory}/drupal/sites/default",
+      }
     }
 
     if $create {
