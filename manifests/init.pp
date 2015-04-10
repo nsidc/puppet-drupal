@@ -43,8 +43,9 @@ class drupal(
   }
   file{'/home/vagrant/bin/drush':
     content => "#!/bin/bash
-    sudo -u ${drupal_user} drush \$*",
-    owner => 'vagrant'
+sudo -u \$USER /usr/bin/drush \$*",
+    owner => 'vagrant',
+    mode => 'a+x',
   }
 
   # Setup drush config file for the vagrant user

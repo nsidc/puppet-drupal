@@ -25,6 +25,8 @@ define drupal::site (
       path => "${drupal_parent_directory}/drupal/sites/${website}/files",
       ensure => 'directory',
       owner => $drupal_user,
+      group => 'vagrant',
+      mode => 'g+sw',
       require => [ Package['apache2'], Exec["mkdir-drupal-files-${website}"] ],
       notify => Exec["chown-drupal-files-${website}"],
     }
@@ -33,14 +35,25 @@ define drupal::site (
       path => "${drupal_parent_directory}/drupal/sites/${website}/private-files",
       ensure => 'directory',
       owner => $drupal_user,
-      group => 'www-data',
+      group => 'vagrant',
+      mode => 'g+sw',
       require => [ Package['apache2'], Exec["mkdir-drupal-files-${website}"] ],
-      notify => Exec["chown-drupal-files-${website}"],
+      notify => [
+        Exec["chown-drupal-files-${website}"],
+        Exec["chmod-drupal-files-${website}"],
+      ]
     }
-    # Use chown because puppet file recursion
+    # Use chown/chmod because puppet file recursion
     # can take a long time with many files
     exec {"chown-drupal-files-${website}":
-      command => "chown -Rh ${drupal_user} \
+      command => "chown -Rh ${drupal_user}:vagrant \
+        ${drupal_parent_directory}/drupal/sites/${website}/files \
+        ${drupal_parent_directory}/drupal/sites/${website}/private-files",
+      refreshonly => true,
+      path => '/bin:/sbin:/usr/bin:/usr/sbin',
+    }
+    exec {"chmod-drupal-files-${website}":
+      command => "chmod -R g+sw \
         ${drupal_parent_directory}/drupal/sites/${website}/files \
         ${drupal_parent_directory}/drupal/sites/${website}/private-files",
       refreshonly => true,
