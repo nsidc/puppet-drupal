@@ -37,8 +37,13 @@ class drupal(
   }
 
   # Setup drush alias for the vagrant user
-  file{'/home/vagrant/.bash_aliases':
-    content => "alias drush=\"sudo -u ${drupal_user}\"",
+  file{'/home/vagrant/bin':
+    ensure => directory,
+    owner => 'vagrant'
+  }
+  file{'/home/vagrant/bin/drush':
+    content => "#!/bin/bash
+    sudo -u ${drupal_user} drush \$*",
     owner => 'vagrant'
   }
 
@@ -49,7 +54,7 @@ class drupal(
   }
   file{'/home/vagrant/.drush/drushrc.php':
     content => "<?php \
-    \$options[\"r\"] = \"${drupal_parent_directory}/drupal\"; \
+    \$options[\"r\"] = \"${drupal_parent_directory}/drupal\";
     ",
     owner => 'vagrant'
   }
