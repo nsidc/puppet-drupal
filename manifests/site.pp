@@ -5,7 +5,6 @@ define drupal::site (
   $create = undef,
   $drupal_parent_directory = '/var/www',
   $drupal_user = 'www-data',
-  $default = false,
   $enabled = true,
 ) {
 
@@ -60,7 +59,7 @@ define drupal::site (
       path => '/bin:/sbin:/usr/bin:/usr/sbin',
     }
 
-    # Use a symlink to point the "default" site to this site
+    # Use a symlink to point the "default" site to this site (if this is the default site)
     if $enabled == 'default' {
       file { "defaultsite-${website}":
         ensure => link,
@@ -89,6 +88,7 @@ define drupal::site (
         notify => [
           File["public-files-${website}"],
           File["private-files-${website}"],
+          File["defaultsite-${website}"],
         ]
       }
 
