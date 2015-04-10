@@ -90,8 +90,7 @@ define drupal::site (
         require => PHP::Pear::Module['drush'],
         creates => "${drupal_parent_directory}/drupal/sites/${website}/settings.php",
         notify => [
-          File["public-files-${website}"],
-          File["private-files-${website}"],
+          Exec["mkdir-drupal-files-${website}"],
           File["defaultsite-${website}"],
         ]
       }
@@ -114,8 +113,7 @@ define drupal::site (
           File[$restore],
         ],
         notify => [
-          File["public-files-${website}"],
-          File["private-files-${website}"],
+          Exec["mkdir-drupal-files-${website}"],
           File["defaultsite-${website}"],
         ]
       }
