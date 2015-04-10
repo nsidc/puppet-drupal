@@ -19,9 +19,8 @@ $ librarian-puppet update
 ```
 
 ## Usage
-
-To use this puppet module, add something like the below to your hiera config. 
-Currently only one drupal site can enabled at a time.
+To use this puppet module, add something like the below to your hiera config:  
+(only one site should be enabled at a time)
 
 ```shell
 
@@ -30,17 +29,17 @@ classes:
   - drupal
 
 # install drupal with drush 
-# (unnecessary if restoring a site)
+# (only needed for new sites)
 drupal::install: yes
 
 # drupal sites
 drupal::sites:
-  site1.example.com: {}
+  site1.example.com:
     create: true
-  site2.example.com: {}
+  site2.example.com:
     restore: /path/to/drush/archive
     enabled: false
-  site3.example.com: {}
+  site3.example.com:
     enabled: false
 
 ```
