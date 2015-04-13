@@ -62,8 +62,8 @@ define drupal::site (
 
     # Configure idmapd to ensure uid mapping works correctly
     file_line {"cookie-domain-${website}":
-      match => '[#]?.*$cookie_domain = .*',
-      line => "\$cookie_domain = ${cookie_domain}",
+      match => '[#]?.*\$cookie_domain = .*',
+      line => "\$cookie_domain = \'.${cookie_domain}\';",
       path => "${drupal_parent_directory}/drupal/sites/${website}/settings.php",
     }
 
