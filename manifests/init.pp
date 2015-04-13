@@ -43,7 +43,9 @@ class drupal(
   }
   file{'/home/vagrant/bin/drush':
     content => "#!/bin/bash
-sudo -u \$USER /usr/bin/drush \$*",
+export TERM=dumb
+sudo -u \$USER /usr/bin/drush \$*
+",
     owner => 'vagrant',
     mode => 'a+x',
   }
