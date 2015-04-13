@@ -1,6 +1,7 @@
 # A defined type to setup a drupal site
 define drupal::site (
   $website = $title,
+  $cookie_domain = undef,
   $restore = undef,
   $create = undef,
   $drupal_parent_directory = '/var/www',
@@ -59,6 +60,14 @@ define drupal::site (
       path => '/bin:/sbin:/usr/bin:/usr/sbin',
     }
 
+    # Setup the cookie domain
+    exec {"set-cookie-domain-${website}":
+      command => "sed -i \'s/#.*cookie_domain.*/\$cookie_domain = ${cookie_domain}/\' \
+        ${drupal_parent_directory}/drupal/sites/${website}/settings.php",
+      refreshonly => true,
+      path => '/bin:/sbin:/usr/bin:/usr/sbin',
+    }
+
     # Use a symlink to point the "default" site to this site (if this is the default site)
     if $enabled == 'default' {
       file { "defaultsite-${website}":
@@ -92,6 +101,7 @@ define drupal::site (
         notify => [
           Exec["mkdir-drupal-files-${website}"],
           File["defaultsite-${website}"],
+          Exec["set-cookie-domain-${website}"]
         ]
       }
 
@@ -115,6 +125,7 @@ define drupal::site (
         notify => [
           Exec["mkdir-drupal-files-${website}"],
           File["defaultsite-${website}"],
+          Exec["set-cookie-domain-${website}"]
         ]
       }
     }

@@ -7,4 +7,5 @@ drupal::sites:
   localhost:
     create: yes
     enabled: default
+    cookie_domain: nsidc.org
 
