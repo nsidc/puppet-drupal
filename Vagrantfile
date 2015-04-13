@@ -14,12 +14,10 @@ Vagrant.configure(2) do |config|
   config.vm.provision "shell", inline: "mkdir -p /vagrant-nsidc-puppet; ln -sf /vagrant /vagrant-nsidc-puppet/drupal"
 
   # Sync modules
-  config.vm.synced_folder "modules/contrib/", "/var/www/drupal/sites/all/modules/contrib/", type: "rsync"
-  config.vm.synced_folder "modules/custom/", "/var/www/drupal/sites/all/modules/custom/", type: "rsync"
+  config.vm.synced_folder "modules/", "/var/www/drupal/sites/all/modules/custom/", type: "rsync"
 
   # Sync themes
-  config.vm.synced_folder "themes/contrib/", "/var/www/drupal/sites/all/themes/contrib/", type: "rsync"
-  config.vm.synced_folder "themes/custom/", "/var/www/drupal/sites/all/themes/custom", type: "rsync"
+  config.vm.synced_folder "themes/", "/var/www/drupal/sites/all/themes/custom/", type: "rsync"
 
   # Apply puppet
   config.vm.provision :nsidc_puppet
