@@ -60,12 +60,11 @@ define drupal::site (
       path => '/bin:/sbin:/usr/bin:/usr/sbin',
     }
 
-    # Setup the cookie domain
-    exec {"set-cookie-domain-${website}":
-      command => "sed -i \'s/#.*cookie_domain.*/\$cookie_domain = ${cookie_domain}/\' \
-        ${drupal_parent_directory}/drupal/sites/${website}/settings.php",
-      refreshonly => true,
-      path => '/bin:/sbin:/usr/bin:/usr/sbin',
+    # Configure idmapd to ensure uid mapping works correctly
+    file_line {"cookie-domain-${website}":
+      match => '[#]?.*$cookie_domain = .*',
+      line => "\$cookie_domain = ${cookie_domain}",
+      path => "${drupal_parent_directory}/drupal/sites/${website}/settings.php",
     }
 
     # Use a symlink to point the "default" site to this site (if this is the default site)
@@ -101,7 +100,7 @@ define drupal::site (
         notify => [
           Exec["mkdir-drupal-files-${website}"],
           File["defaultsite-${website}"],
-          Exec["set-cookie-domain-${website}"]
+          File_line["cookie-domain-${website}"]
         ]
       }
 
@@ -125,7 +124,7 @@ define drupal::site (
         notify => [
           Exec["mkdir-drupal-files-${website}"],
           File["defaultsite-${website}"],
-          Exec["set-cookie-domain-${website}"]
+          File_line["cookie-domain-${website}"]
         ]
       }
     }

@@ -12,6 +12,7 @@
     }
   ],
   "dependencies": [
-    { "name": "example42-php" }
+    { "name": "example42-php" },
+    { "name": "puppetlabs/stdlib" }
   ]
 }
