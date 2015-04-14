@@ -36,20 +36,6 @@ class drupal(
     use_package  => false,
   }
 
-  # Setup drush alias for the vagrant user
-  file{'/home/vagrant/bin':
-    ensure => directory,
-    owner => 'vagrant'
-  }
-  file{'/home/vagrant/bin/drush':
-    content => "#!/bin/bash
-export TERM=dumb
-sudo -u \$USER /usr/bin/drush \$*
-",
-    owner => 'vagrant',
-    mode => 'a+x',
-  }
-
   # Setup drush config file for the vagrant user
   file{'/home/vagrant/.drush':
     ensure => directory,

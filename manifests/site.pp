@@ -100,8 +100,21 @@ define drupal::site (
         notify => [
           Exec["mkdir-drupal-files-${website}"],
           File["defaultsite-${website}"],
-          File_line["cookie-domain-${website}"]
+          File_line["cookie-domain-${website}"],
+          Exec["drush-vset-file_public_path-${website}"]
         ]
+      }
+      # Set the public files location
+      exec{"drush-vset-file_public_path-${website}":
+        command => "drush vset file_public_path sites/${website}/files",
+        cwd => "${drupal_parent_directory}/drupal",
+        user => 'vagrant',
+        path => '/bin:/sbin:/usr/bin:/usr/sbin',
+        require => [
+          PHP::Pear::Module['drush'],
+          File["defaultsite-${website}"],
+        ],
+        refreshonly => true,
       }
 
     } elsif $restore {
