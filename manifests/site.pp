@@ -3,7 +3,6 @@ define drupal::site (
   $website = $title,
   $cookie_domain = undef,
   $restore = undef,
-  $create = undef,
   $drupal_parent_directory = '/var/www',
   $drupal_user = 'www-data',
   $enabled = true,
@@ -60,13 +59,6 @@ define drupal::site (
       path => '/bin:/sbin:/usr/bin:/usr/sbin',
     }
 
-    # Configure idmapd to ensure uid mapping works correctly
-    file_line {"cookie-domain-${website}":
-      match => '[#]?.*\$cookie_domain = .*',
-      line => "\$cookie_domain = \'.${cookie_domain}\';",
-      path => "${drupal_parent_directory}/drupal/sites/${website}/settings.php",
-    }
-
     # Use a symlink to point the "default" site to this site (if this is the default site)
     if $enabled == 'default' {
       file { "defaultsite-${website}":
@@ -81,8 +73,46 @@ define drupal::site (
       }
     }
 
-    if $create {
-      # Use drush to create the site
+    # If specified, configure the cookie domain for this drupal site
+    if $cookie_domain {
+      file_line {"cookie-domain-${website}":
+        match => '[#]?.*\$cookie_domain = .*',
+        line => "\$cookie_domain = \'.${cookie_domain}\';",
+        path => "${drupal_parent_directory}/drupal/sites/${website}/settings.php",
+      }
+    } else {
+      # Otherwise, leave the cookie domain alone
+      file_line {"cookie-domain-${website}":
+        line => '#cookie_domain not specified via puppet',
+        path => "${drupal_parent_directory}/drupal/sites/${website}/settings.php",
+      }
+    }
+
+    # Restore from a backup using drush 
+    if $restore {
+      # Get filename from restore parameter
+      file{$restore:}
+      exec{"drush-archive-restore-${website}":
+        command => "drush archive-restore \
+          --destination=${drupal_parent_directory}/drupal \
+          --db-url=mysql://root@localhost/drupal \
+          --overwrite \
+          ${restore}",
+        creates => "${drupal_parent_directory}/drupal/sites/${website}/settings.php",
+        user => 'vagrant',
+        path => '/bin:/sbin:/usr/bin:/usr/sbin',
+        require => [
+          Php::Pear::Module['drush'],
+          File[$restore],
+        ],
+        notify => [
+          Exec["mkdir-drupal-files-${website}"],
+          File["defaultsite-${website}"],
+          File_line["cookie-domain-${website}"]
+        ]
+      }
+    } else {
+      # If not restoring, create the site using drush instead
       exec{"drush-site-install-${website}":
         command => "yes | drush site-install standard \
           --verbose \
@@ -115,30 +145,6 @@ define drupal::site (
           File["defaultsite-${website}"],
         ],
         refreshonly => true,
-      }
-
-    } elsif $restore {
-      # Get filename from restore parameter
-      file{$restore:}
-      # Use drush to restore the site
-      exec{"drush-archive-restore-${website}":
-        command => "drush archive-restore \
-          --destination=${drupal_parent_directory}/drupal \
-          --db-url=mysql://root@localhost/drupal \
-          --overwrite \
-          ${restore}",
-        creates => "${drupal_parent_directory}/drupal/index.php",
-        user => 'vagrant',
-        path => '/bin:/sbin:/usr/bin:/usr/sbin',
-        require => [
-          Php::Pear::Module['drush'],
-          File[$restore],
-        ],
-        notify => [
-          Exec["mkdir-drupal-files-${website}"],
-          File["defaultsite-${website}"],
-          File_line["cookie-domain-${website}"]
-        ]
       }
     }
 

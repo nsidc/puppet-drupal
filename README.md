@@ -35,7 +35,6 @@ drupal::install: yes
 # drupal sites
 drupal::sites:
   site1.example.com:
-    create: true
   site2.example.com:
     restore: /path/to/drush/archive
     enabled: false
