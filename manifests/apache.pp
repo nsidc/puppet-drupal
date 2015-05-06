@@ -3,7 +3,9 @@ class drupal::apache() {
 
   # Install Apache
   package { 'apache2': }
+  package { 'apache2-utils': }
   package { 'apache2-dev': }
+  package { 'libapache2-mod-fastcgi': }
   package { 'libapache2-mod-php5': }
 
   # Enable the Apache service
@@ -13,7 +15,8 @@ class drupal::apache() {
     require => [
       Package['apache2'],
       Package['apache2-dev'],
-      Package['libapache2-mod-php5'],
+      Package['libapache2-mod-fastcgi'],
+      Drupal::Apache::Module['mpm_worker'],
     ]
   }
 
@@ -71,10 +74,36 @@ class drupal::apache() {
     ]
   }
 
+  # Enable fastcgi settings
+  drupal::apache::conf{'php5-fpm':
+    require => [
+      Drupal::Apache::Module['mpm_worker'],
+      Drupal::Apache::Module['actions'],
+    ],
+  }
+
   # Enable Apache modules for Drupal
-  drupal::apache::module{'php5':}
   drupal::apache::module{'ssl':}
   drupal::apache::module{'rewrite':}
+  drupal::apache::module{'fastcgi':}
+  drupal::apache::module{'actions':}
+
+  # Switch Apache from prefork to worker (worker is better)
+  # Disable mod_php (not supported by worker, using fastcgi and php5-fpm instead)
+  drupal::apache::module{'mpm_prefork':
+    status => 'disabled',
+    require => Drupal::Apache::Module['php5']
+  }
+  drupal::apache::module{'php5':
+    status => 'disabled',
+    require => Package['libapache2-mod-php5']
+  }
+  drupal::apache::module{'mpm_worker':
+    require => [
+      Drupal::Apache::Module['mpm_prefork'],
+      Drupal::Apache::Module['php5'],
+    ],
+  }
 
   # Enable drupal apache site
   drupal::apache::site{'drupal':}

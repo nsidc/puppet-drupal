@@ -14,6 +14,13 @@ class drupal::php () {
   # (phpenmod, /etc/php5/, etc.)
   package {'php5-common':}
 
+  # Enable the php5-fpm service
+  service{'php5-fpm':
+    ensure => running,
+    enable => true,
+    require => Package['php5-fpm'],
+  }
+
   # Setup log directory for php
   file { '/var/log/php':
     ensure => 'directory',
@@ -26,6 +33,9 @@ class drupal::php () {
   php::module {'gd':}
   php::module {'imagick':}
   php::module {'json':}
+  php::module {'fpm':}
+  php::module {'xhprof':}
+  php::module {'mysqlnd':}
 
   # Enable drupal php config
   drupal::php::conf{'drupal':
