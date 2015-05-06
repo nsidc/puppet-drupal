@@ -14,7 +14,8 @@ class drupal::php () {
   # (phpenmod, /etc/php5/, etc.)
   package {'php5-common':}
 
-  # Enable the php5-fpm service
+  # Install and enable the php5-fpm service
+  package {'php5-fpm':}
   service{'php5-fpm':
     ensure => running,
     enable => true,
