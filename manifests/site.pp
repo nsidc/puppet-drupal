@@ -73,6 +73,14 @@ define drupal::site (
       }
     }
 
+    # Disable the Drupal core search indexing process
+    # (it just slows things down)
+    # https://www.drupal.org/node/985484
+    file_line {"search-cron-limit-${website}":
+      line => "\$conf[\'search_cron_limit\'] = \'0\';",
+      path => "${drupal_parent_directory}/drupal/sites/${website}/settings.php",
+    }
+
     # If specified, configure the cookie domain for this drupal site
     if $cookie_domain {
       file_line {"cookie-domain-${website}":
@@ -108,7 +116,8 @@ define drupal::site (
         notify => [
           Exec["mkdir-drupal-files-${website}"],
           File["defaultsite-${website}"],
-          File_line["cookie-domain-${website}"]
+          File_line["cookie-domain-${website}"],
+          File_line["search-cron-limit-${website}"],
         ]
       }
     } else {
@@ -131,6 +140,7 @@ define drupal::site (
           Exec["mkdir-drupal-files-${website}"],
           File["defaultsite-${website}"],
           File_line["cookie-domain-${website}"],
+          File_line["search-cron-limit-${website}"],
           Exec["drush-vset-file_public_path-${website}"]
         ]
       }
