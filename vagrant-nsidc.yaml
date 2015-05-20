@@ -1,6 +1,6 @@
 ---
 project: puppet-drupal
-gitrepo: git@bitbucket.org:nsidc/puppet-drupal.git
+gitrepo: git@github.com:nsidc/puppet-drupal.git
 gitbranch: master
 
 vsphere:
