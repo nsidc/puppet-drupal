@@ -125,10 +125,3 @@ nsidc_jenkins::jobs:
       (vagrant nsidc hijack --env=integration || true)
       (vagrant nsidc destroy --env=integration || true)
 
-      # notify the user to do the following on completion
-      echo 'when this job completes you will need to manually destroy ci'
-      echo 'from your local machine (in the project source directory'
-      echo '  >>  rm -rf .vagrant-ci'
-      echo '  >>  vagrant nsidc hijack --env=ci'
-      echo '  >>  vagrant nsidc destroy --env=ci'
-
