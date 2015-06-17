@@ -9,7 +9,7 @@ Puppetfile:
 forge "https://forgeapi.puppetlabs.com"
 
 mod "nsidc/drupal",
-  :git => "git@bitbucket.org:/nsidc/puppet-drupal.git",
+  :git => "git@github.com:/nsidc/puppet-drupal.git",
   :ref => "latest"
 ```
 
@@ -30,16 +30,13 @@ classes:
 
 # install drupal with drush 
 # (only needed for new sites)
-drupal::install: yes
+drupal::install: no
 
 # drupal sites
 drupal::sites:
   site1.example.com:
-  site2.example.com:
     restore: /path/to/drush/archive
-    enabled: false
-  site3.example.com:
-    enabled: false
+    enabled: default
 
 ```
 
