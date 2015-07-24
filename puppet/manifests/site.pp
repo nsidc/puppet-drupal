@@ -35,4 +35,16 @@ if $environment == 'ci' {
     provider => 'gem'
   }
 
+} else {
+
+  class { 'drupal':
+    install => yes,
+    mail_domain => 'example.com',
+    mail_server => 'smtp.example.com'
+  }
+
+  drupal::site { 'localhost':
+    enabled => 'default',
+    cookie_domain => 'example.com',
+  }
 }

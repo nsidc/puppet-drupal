@@ -4,7 +4,6 @@
 :merge_behavior: deeper
 :hierarchy:
   - "puppet/%{environment}"
-  - puppet/websites
   - puppet/hiera
   - scm_creds
   - vagrant-nsidc
