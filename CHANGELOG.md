@@ -1,4 +1,4 @@
-## 0.1.0 
+## puppet-drupal v0.1.1 (7/23/2015)
 
 Features:
 
