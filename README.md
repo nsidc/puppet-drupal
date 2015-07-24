@@ -31,6 +31,8 @@ classes:
 # install drupal with drush 
 # (only needed for new sites)
 drupal::install: no
+drupal::mail_domain: example.com
+drupal::mail_server: smtp.example.com
 
 # drupal sites
 drupal::sites:

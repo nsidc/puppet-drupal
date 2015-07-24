@@ -1,5 +1,5 @@
-## 1.0.0 (unreleased)
+## 0.1.0 
 
 Features:
 
-  - First working version. Installs & configures LAMP and drupal. Also provides drupal site management.
+  - A mostly working version. Installs & configures LAMP, postfix, and drupal. Manages Drupal sites through defined types.
