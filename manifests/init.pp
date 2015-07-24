@@ -3,13 +3,37 @@ class drupal(
   $install = false,
   $version = 7,
   $drupal_parent_directory = '/var/www',
-  $drupal_user = 'www-data'
+  $drupal_user = 'www-data',
+  $mail_domain = undef,
+  $mail_server = undef,
 ) {
 
   # Load several puppet classes to setup the LAMP stack for Drupal
   include drupal::apache
   include drupal::mysql
   include drupal::php
+
+  # Configure postfix to send emails for Drupal
+  include postfix
+  if $mail_domain {
+    postfix::postconf { 'mydomain':
+      value => $mail_domain,
+      require => Package['postfix'],
+      notify => Service['postfix']
+    }
+    postfix::postconf { 'myorigin':
+      value => '$mydomain',
+      require => Package['postfix'],
+      notify => Service['postfix']
+    }
+  }
+  if $mail_server {
+    postfix::postconf { 'relayhost':
+      value => "[$mail_server]",
+      require => Package['postfix'],
+      notify => Service['postfix']
+    }
+  }
 
   # Pass "-y" to php class installation options (works around bug in puppet-php)
   class {'::php':

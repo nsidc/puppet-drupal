@@ -2,9 +2,11 @@ classes:
   - drupal
 
 drupal::install: yes
+drupal::mail_domain: example.com
+drupal::mail_server: mailserver.example.com
 
 drupal::sites: 
   localhost:
     enabled: default
-    cookie_domain: nsidc.org
+    cookie_domain: example.com
 
