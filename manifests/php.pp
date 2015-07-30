@@ -31,7 +31,6 @@ class drupal::php () {
   }
 
   # Install PHP Modules needed for Drupal
-  php::module {'mysql':}
   php::module {'ldap':}
   php::module {'gd':}
   php::module {'imagick':}
