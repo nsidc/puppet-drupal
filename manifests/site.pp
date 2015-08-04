@@ -8,7 +8,7 @@ define drupal::site (
   $drupal_user = 'www-data',
   $admin_user = 'vagrant',
   $admin_group = 'vagrant',
-  $cron_minute = '10',
+  $cron_minute = '*',
   $enabled = true,
 ) {
 
@@ -113,7 +113,7 @@ define drupal::site (
     } else {
       # Otherwise, leave the cookie domain alone
       file_line {"cookie-domain-${website}":
-        line => '#cookie_domain not specified via puppet',
+        line => '# cookie_domain not specified via puppet',
         path => "${drupal_parent_directory}/drupal/sites/${website}/settings.php",
       }
     }
