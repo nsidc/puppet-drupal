@@ -7,6 +7,7 @@ define drupal::site (
   $drupal_user = 'www-data',
   $admin_user = 'vagrant',
   $admin_user = 'vagrant',
+  $cron_minute = '10',
   $enabled = true,
 ) {
 
@@ -73,6 +74,14 @@ define drupal::site (
       file { "defaultsite-${website}":
         path => "${drupal_parent_directory}/drupal/sites/default",
       }
+    }
+
+    # Setup system cron for Drupal
+    cron { "drupal-${website}":
+      command => "cd ${drupal_parent_directory}/drupal/sites/${website} \
+        && /usr/bin/env PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin COLUMNS=72 drush --quiet cron",
+      user    => $drupal_user,
+      minute  => $cron_minute,
     }
 
     # Disable the Drupal core search indexing process
