@@ -134,6 +134,7 @@ define drupal::site (
         require => [
           Php::Pear::Module['drush'],
           File[$restore],
+          File[$drupal_parent_directory],
         ],
         notify => [
           Exec["mkdir-drupal-files-${website}"],
@@ -157,10 +158,7 @@ define drupal::site (
         user => $admin_user,
         provider => shell,
         path => '/bin:/sbin:/usr/bin:/usr/sbin',
-        require => [
-          Exec['drush-download-drupal'],
-          File[$drupal_parent_directory],
-        ],
+        require => Exec['drush-download-drupal'],
         creates => "${drupal_parent_directory}/drupal/sites/${website}/settings.php",
         notify => [
           Exec["mkdir-drupal-files-${website}"],
