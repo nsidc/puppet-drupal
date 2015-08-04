@@ -98,7 +98,7 @@ class drupal(
       provider => shell,
       creates => "${drupal_parent_directory}/drupal/index.php",
       path => '/bin:/sbin:/usr/bin:/usr/sbin',
-      require => Class['drupal::php']
+      require => [ Class['drupal::php'], File[$drupal_parent_directory] ]
     }
   }
 }
