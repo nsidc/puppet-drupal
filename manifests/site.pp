@@ -84,13 +84,13 @@ define drupal::site (
       minute  => $cron_minute,
     }
 
-    # Disable the Drupal core search indexing process
-    # (it just slows things down)
+    # This directive will disable Drupal core search indexing if/when it is replaced with Apache Solr
     # https://www.drupal.org/node/985484
-    file_line {"search-cron-limit-${website}":
-      line => "\$conf[\'search_cron_limit\'] = \'0\';",
-      path => "${drupal_parent_directory}/drupal/sites/${website}/settings.php",
-    }
+    #
+    # file_line {"search-cron-limit-${website}":
+    #   line => "\$conf[\'search_cron_limit\'] = \'0\';",
+    #   path => "${drupal_parent_directory}/drupal/sites/${website}/settings.php",
+    # }
 
     # If specified, configure the cookie domain for this drupal site
     if $cookie_domain {
