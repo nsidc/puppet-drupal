@@ -79,7 +79,6 @@ class drupal(
     ensure => 'directory',
     owner => $admin_user,
     group => $admin_group,
-    recurse => true,
     require => Class['drupal::apache']
   }
 
