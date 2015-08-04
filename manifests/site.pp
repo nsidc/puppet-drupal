@@ -2,11 +2,12 @@
 define drupal::site (
   $website = $title,
   $cookie_domain = undef,
+  $search_cron_limit = undef,
   $restore = undef,
   $drupal_parent_directory = '/var/www',
   $drupal_user = 'www-data',
   $admin_user = 'vagrant',
-  $admin_user = 'vagrant',
+  $admin_group = 'vagrant',
   $cron_minute = '10',
   $enabled = true,
 ) {
@@ -84,13 +85,23 @@ define drupal::site (
       minute  => $cron_minute,
     }
 
-    # This directive will disable Drupal core search indexing if/when it is replaced with Apache Solr
+    # If specified, configure the search_cron_limit for this drupal site.
+    # In the future, this directive can be used to disable Drupal core search indexing,
+    #  if/when it is replaced with Apache Solr
     # https://www.drupal.org/node/985484
-    #
-    # file_line {"search-cron-limit-${website}":
-    #   line => "\$conf[\'search_cron_limit\'] = \'0\';",
-    #   path => "${drupal_parent_directory}/drupal/sites/${website}/settings.php",
-    # }
+    if $search_cron_limit {
+      file_line {"search-cron-limit-${website}":
+        match => "[#]?.*\$conf[\'search_cron_limit\']",
+        line => "\$conf[\'search_cron_limit\'] = \'${search_cron_limit}\';",
+        path => "${drupal_parent_directory}/drupal/sites/${website}/settings.php",
+      }
+    } else {
+      file_line {"search-cron-limit-${website}":
+        match => "[#]?.*\$conf[\'search_cron_limit\']",
+        line => "# \$conf[\'search_cron_limit\'] not specified via puppet",
+        path => "${drupal_parent_directory}/drupal/sites/${website}/settings.php",
+      }
+    }
 
     # If specified, configure the cookie domain for this drupal site
     if $cookie_domain {
@@ -132,6 +143,7 @@ define drupal::site (
         ]
       }
     } else {
+
       # If not restoring, create the site using drush instead
       exec{"drush-site-install-${website}":
         command => "yes | drush site-install standard \
@@ -145,7 +157,10 @@ define drupal::site (
         user => $admin_user,
         provider => shell,
         path => '/bin:/sbin:/usr/bin:/usr/sbin',
-        require => PHP::Pear::Module['drush'],
+        require => [
+          PHP::Pear::Module['drush'],
+          Exec['drush-download-drupal'],
+        ],
         creates => "${drupal_parent_directory}/drupal/sites/${website}/settings.php",
         notify => [
           Exec["mkdir-drupal-files-${website}"],
