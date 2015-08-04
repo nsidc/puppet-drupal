@@ -4,6 +4,8 @@ class drupal(
   $version = 7,
   $drupal_parent_directory = '/var/www',
   $drupal_user = 'www-data',
+  $admin_user = 'vagrant',
+  $admin_group = 'vagrant',
   $mail_domain = undef,
   $mail_server = undef,
 ) {
@@ -60,22 +62,31 @@ class drupal(
     use_package  => false,
   }
 
-  # Setup drush config file for the vagrant user
-  file{'/home/vagrant/.drush':
+  # Setup drush config file for the admin user
+  file{"/home/${admin_user}/.drush":
     ensure => directory,
-    owner => 'vagrant'
+    owner => $admin_user
   }
-  file{'/home/vagrant/.drush/drushrc.php':
+  file{"/home/${admin_user}/.drush/drushrc.php":
     content => "<?php \
     \$options[\"r\"] = \"${drupal_parent_directory}/drupal\";
     ",
-    owner => 'vagrant'
+    owner => $admin_user
   }
 
   # Use drush to install drupal
   if $install {
 
     # Install drupal7 with drush
+
+    # Set drupal install dir to be owned by admin user
+    file { $drupal_parent_directory:
+      ensure => 'directory',
+      owner => $admin_user,
+      group => $admin_group,
+      recurse => true,
+      require => Class['drupal::apache']
+    }
     exec{'drush-download-drupal':
       command => "yes | drush pm-download \
         --verbose \
@@ -83,11 +94,11 @@ class drupal(
         --destination=${drupal_parent_directory} \
         drupal-${version}
       ",
-      user => 'vagrant',
+      user => $admin_user,
       provider => shell,
       creates => "${drupal_parent_directory}/drupal/index.php",
       path => '/bin:/sbin:/usr/bin:/usr/sbin',
-      require => PHP::Pear::Module['drush']
+      require => Class['drupal::php']
     }
   }
 }

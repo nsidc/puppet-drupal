@@ -5,6 +5,8 @@ define drupal::site (
   $restore = undef,
   $drupal_parent_directory = '/var/www',
   $drupal_user = 'www-data',
+  $admin_user = 'vagrant',
+  $admin_user = 'vagrant',
   $enabled = true,
 ) {
 
@@ -24,7 +26,7 @@ define drupal::site (
       path => "${drupal_parent_directory}/drupal/sites/${website}/files",
       ensure => 'directory',
       owner => $drupal_user,
-      group => 'vagrant',
+      group => $admin_group,
       mode => 'g+sw',
       require => [ Package['apache2'], Exec["mkdir-drupal-files-${website}"] ],
       notify => Exec["chown-drupal-files-${website}"],
@@ -34,7 +36,7 @@ define drupal::site (
       path => "${drupal_parent_directory}/drupal/sites/${website}/private-files",
       ensure => 'directory',
       owner => $drupal_user,
-      group => 'vagrant',
+      group => $admin_group,
       mode => 'g+sw',
       require => [ Package['apache2'], Exec["mkdir-drupal-files-${website}"] ],
       notify => [
@@ -45,7 +47,7 @@ define drupal::site (
     # Use chown/chmod because puppet file recursion
     # can take a long time with many files
     exec {"chown-drupal-files-${website}":
-      command => "chown -Rh ${drupal_user}:vagrant \
+      command => "chown -Rh ${drupal_user}:${admin_group} \
         ${drupal_parent_directory}/drupal/sites/${website}/files \
         ${drupal_parent_directory}/drupal/sites/${website}/private-files",
       refreshonly => true,
@@ -107,7 +109,7 @@ define drupal::site (
           --overwrite \
           ${restore}",
         creates => "${drupal_parent_directory}/drupal/sites/${website}/settings.php",
-        user => 'vagrant',
+        user => $admin_user,
         path => '/bin:/sbin:/usr/bin:/usr/sbin',
         require => [
           Php::Pear::Module['drush'],
@@ -131,7 +133,7 @@ define drupal::site (
           --account-pass=admin \
           --db-url=mysql://root@localhost/drupal",
         cwd => "${drupal_parent_directory}/drupal",
-        user => 'vagrant',
+        user => $admin_user,
         provider => shell,
         path => '/bin:/sbin:/usr/bin:/usr/sbin',
         require => PHP::Pear::Module['drush'],
@@ -148,7 +150,7 @@ define drupal::site (
       exec{"drush-vset-file_public_path-${website}":
         command => "drush vset file_public_path sites/${website}/files",
         cwd => "${drupal_parent_directory}/drupal",
-        user => 'vagrant',
+        user => $admin_user,
         path => '/bin:/sbin:/usr/bin:/usr/sbin',
         require => [
           PHP::Pear::Module['drush'],

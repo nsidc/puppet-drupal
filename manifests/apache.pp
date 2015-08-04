@@ -22,16 +22,7 @@ class drupal::apache() {
 
   # Fix up Apache default permissions 
 
-  # Set /var/www to be owned by vagrant
-  file { '/var/www':
-    ensure => 'directory',
-    owner => 'vagrant',
-    group => 'vagrant',
-    recurse => true,
-    require => Package['apache2']
-  }
-
-  # Grant read permissions to vagrant and others on apache logs
+  # Grant general read permissions to apache logs for troubleshooting
   file { '/var/log/apache2':
     ensure => 'directory',
     mode => 'a+rx',
