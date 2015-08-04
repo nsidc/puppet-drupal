@@ -8,7 +8,7 @@ define drupal::site (
   $drupal_user = 'www-data',
   $admin_user = 'vagrant',
   $admin_group = 'vagrant',
-  $cron_minute = '*',
+  $cron_minute = '10',
   $enabled = true,
 ) {
 
