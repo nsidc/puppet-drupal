@@ -157,7 +157,10 @@ define drupal::site (
         user => $admin_user,
         provider => shell,
         path => '/bin:/sbin:/usr/bin:/usr/sbin',
-        require => Exec['drush-download-drupal'],
+        require => [
+          Exec['drush-download-drupal'],
+          File[$drupal_parent_directory],
+        ]
         creates => "${drupal_parent_directory}/drupal/sites/${website}/settings.php",
         notify => [
           Exec["mkdir-drupal-files-${website}"],
