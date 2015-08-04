@@ -160,7 +160,7 @@ define drupal::site (
         require => [
           Exec['drush-download-drupal'],
           File[$drupal_parent_directory],
-        ]
+        ],
         creates => "${drupal_parent_directory}/drupal/sites/${website}/settings.php",
         notify => [
           Exec["mkdir-drupal-files-${website}"],
