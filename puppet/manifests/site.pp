@@ -45,6 +45,6 @@ if $environment == 'ci' {
 
   drupal::site { 'localhost':
     enabled => 'default',
-    cookie_domain => 'example.com',
+    cookie_domain => 'nsidc.org',
   }
 }
