@@ -74,19 +74,19 @@ class drupal(
     owner => $admin_user
   }
 
+  # Set drupal install dir to be owned by admin user
+  file { $drupal_parent_directory:
+    ensure => 'directory',
+    owner => $admin_user,
+    group => $admin_group,
+    recurse => true,
+    require => Class['drupal::apache']
+  }
+
   # Use drush to install drupal
   if $install {
 
     # Install drupal7 with drush
-
-    # Set drupal install dir to be owned by admin user
-    file { $drupal_parent_directory:
-      ensure => 'directory',
-      owner => $admin_user,
-      group => $admin_group,
-      recurse => true,
-      require => Class['drupal::apache']
-    }
     exec{'drush-download-drupal':
       command => "yes | drush pm-download \
         --verbose \
