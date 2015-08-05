@@ -42,6 +42,7 @@ class drupal::php () {
   php::module {'fpm':}
   php::module {'xhprof':}
   php::module {'mysqlnd':}
+  php::module {'curl':}
 
   # Configure apcu for upload progress
   php::module {'apcu':}
