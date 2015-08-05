@@ -28,9 +28,13 @@ class drupal::php () {
   file { '/var/log/php':
     ensure => 'directory',
     owner => 'www-data',
+    mode => 'a+rx',
   }
 
   # Install PHP Modules needed for Drupal
+  Php::Module {
+    notify => Service['php5-fpm']
+  }
   php::module {'ldap':}
   php::module {'gd':}
   php::module {'imagick':}
@@ -38,6 +42,15 @@ class drupal::php () {
   php::module {'fpm':}
   php::module {'xhprof':}
   php::module {'mysqlnd':}
+  php::module {'curl':}
+
+  # Configure apcu for upload progress
+  php::module {'apcu':}
+  file_line { 'apc.rfc1867':
+    path => '/etc/php5/mods-available/apcu.ini',
+    line => 'apc.rfc1867 = 1',
+    require => Php::Module['apcu']
+  }
 
   # Enable drupal php config
   drupal::php::conf{'drupal':
