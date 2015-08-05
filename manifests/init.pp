@@ -14,6 +14,7 @@ class drupal(
   include drupal::apache
   include drupal::mysql
   include drupal::php
+  include php
 
   # Configure postfix to send emails for Drupal
   include postfix
@@ -37,10 +38,6 @@ class drupal(
     }
   }
 
-  # Pass "-y" to php class installation options (works around bug in puppet-php)
-  class {'::php':
-    install_options => "-y"
-  }
 
   # Create drupal sites from defined types in hiera
   $drupalsites = hiera_hash('drupal::sites', {})

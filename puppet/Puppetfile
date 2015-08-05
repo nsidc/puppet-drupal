@@ -9,10 +9,8 @@ mod 'nsidc/nsidc_nfs',
   :git => 'git@bitbucket.org:/nsidc/puppet-nsidc-nfs.git',
   :ref => 'latest'
 
-# This version is from March 2nd, 2015. Waiting for the authors to release the next version.
-mod 'example42-php',
-  :git => 'https://github.com/example42/puppet-php.git',
-  :ref => 'f5ceb0a5c4ced7f890b7c16a4727f22a2864d920'
+# Module for configuring php and installing php modules
+mod 'example42-php'
 
 # Module for configuring postfix
 mod 'example42/postfix'
