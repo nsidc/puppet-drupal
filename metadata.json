@@ -12,7 +12,7 @@
     }
   ],
   "dependencies": [
-    { "name": "example42-php", "version_requirement": ">=2 <3" },
+    { "name": "example42-php", "version_requirement": ">=2 <=2.0.21" },
     { "name": "example42-postfix" },
     { "name": "puppetlabs/stdlib" }
   ]

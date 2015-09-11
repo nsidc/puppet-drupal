@@ -10,7 +10,7 @@ mod 'nsidc/nsidc_nfs',
   :ref => 'latest'
 
 # Module for configuring php and installing php modules
-mod 'example42-php'
+mod 'example42-php', '2.0.21'
 
 # Module for configuring postfix
 mod 'example42/postfix'
