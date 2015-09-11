@@ -11,10 +11,12 @@ class drupal(
 ) {
 
   # Load several puppet classes to setup the LAMP stack for Drupal
-  include drupal::apache
-  include drupal::mysql
-  include drupal::php
-  include php
+  include ::php
+  include ::drupal::apache
+  include ::drupal::mysql
+  class {'::drupal::php':
+    require => Class['::php']
+  }
 
   # Configure postfix to send emails for Drupal
   include postfix
