@@ -1,6 +1,6 @@
 {
   "name": "nsidc-drupal",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "author": "NSIDC",
   "license": "NSIDC",
   "summary": "A module to manage drupal.",
