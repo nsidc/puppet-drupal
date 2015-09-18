@@ -76,6 +76,8 @@ nsidc_jenkins::jobs:
           - minor
           - major
     command: |
+      git config --global user.name jenkins
+      git config --global user.email jenkins@ci.%{hiera('project')}.apps.int.nsidc.org
       git checkout $branch
       rake bump[$version_type]
       git push origin master --tags
