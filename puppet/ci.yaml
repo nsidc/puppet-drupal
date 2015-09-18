@@ -4,6 +4,8 @@
 classes:
   - nsidc_jenkins
 
+nsidc_jenkins::use_vagrant: true
+
 # Jenkins Plugins
 nsidc_jenkins::plugins:
   git: {}
@@ -19,56 +21,46 @@ nsidc_jenkins::plugins:
   jabber: {}
   ansicolor: {}
 
+# CI Job Names
+job_checkout_project: "%{hiera('project')}_01_Checkout_Project"
+job_check_syntax: "%{hiera('project')}_02_Check_Syntax"
+job_run_unit_tests: "%{hiera('project')}_03_Run_Unit_Tests"
+job_run_acceptance_tests: "%{hiera('project')}_04_Run_Acceptance_Tests"
+job_bump_version_and_tag: "%{hiera('project')}_10_Release_Bump_Version_and_Tag"
+job_release_publish_latest: "%{hiera('project')}_11_Release_Publish_Latest"
+job_destroy_vms: "%{hiera('project')}_99_Destroy_VMs"
+
 # Jenkins Jobs
 nsidc_jenkins::jobs:
   # clone the project into the shared workspace
-  "Project_%{hiera('project')}_Branch_%{hiera('gitbranch')}_1_Checkout_Project":
+  "%{hiera('job_checkout_project')}":
     git:
       repo: "%{hiera('gitrepo')}"
       branches: "*/%{hiera('gitbranch')}"
       checkout_local: "%{hiera('gitbranch')}"
       poll_scm: true
     workspace: "/var/lib/jenkins/workspace-%{hiera('project')}-%{hiera('gitbranch')}"
-    trigger_job: "Project_%{hiera('project')}_Branch_%{hiera('gitbranch')}_2_Configure_System"
+    trigger_job: "%{hiera('job_check_syntax')}"
 
-  # use puppet to install system dependencies, such as Bundler
-  "Project_%{hiera('project')}_Branch_%{hiera('gitbranch')}_2_Configure_System":
-    command: |
-      #!/bin/bash -x
-      cd puppet
-      librarian-puppet clean || exit 1
-      librarian-puppet update || exit 1
-      cd -
-      # with the --detailed-exitcodes flag, exit code of 2 means that changes
-      # were made, i.e., puppet did stuff to your system like it's supposed to
-      #
-      # https://docs.puppetlabs.com/references/3.4.latest/man/agent.html
-      sudo puppet apply --environment=ci %{::puppet_options} %{::puppet_manifest}
-      (( $? == 0 || $? == 2 )) || exit 1
-    workspace: "/var/lib/jenkins/workspace-%{hiera('project')}-%{hiera('gitbranch')}"
-    trigger_job: "Project_%{hiera('project')}_Branch_%{hiera('gitbranch')}_3_Check_Syntax"
-
-  "Project_%{hiera('project')}_Branch_%{hiera('gitbranch')}_3_Check_Syntax":
+  "%{hiera('job_check_syntax')}":
     command: rake lint
     workspace: "/var/lib/jenkins/workspace-%{hiera('project')}-%{hiera('gitbranch')}"
-    trigger_job: "Project_%{hiera('project')}_Branch_%{hiera('gitbranch')}_4_Run_Unit_Tests"
+    trigger_job: "%{hiera('job_run_unit_tests')}"
 
-  "Project_%{hiera('project')}_Branch_%{hiera('gitbranch')}_4_Run_Unit_Tests":
+  "%{hiera('job_run_unit_tests')}":
     command: rake spec:unit
     workspace: "/var/lib/jenkins/workspace-%{hiera('project')}-%{hiera('gitbranch')}"
-    trigger_job: "Project_%{hiera('project')}_Branch_%{hiera('gitbranch')}_5_Run_Integration_Tests"
+    trigger_job: "%{hiera('job_run_acceptance_tests')}"
 
-  "Project_%{hiera('project')}_Branch_%{hiera('gitbranch')}_5_Run_Integration_Tests":
+  "%{hiera('job_run_acceptance_tests')}":
     command: |
       set +e; vagrant nsidc hijack --env=integration; set -e
       rake spec:integration
     workspace: "/var/lib/jenkins/workspace-%{hiera('project')}-%{hiera('gitbranch')}"
 
-
-
   # Jobs for performing a release.
 
-  "Project_%{hiera('project')}_Release_1_Bump_Version_and_Tag":
+  "%{hiera('job_bump_version_and_tag')}":
     git:
       repo: "%{hiera('gitrepo')}"
       poll_scm: false
@@ -88,12 +80,12 @@ nsidc_jenkins::jobs:
       rake bump[$version_type]
       git push origin master --tags
     workspace: /var/lib/jenkins/workspaces/%{hiera('project')}/release
-    trigger_job: "Project_%{hiera('project')}_Release_2_Publish_Latest"
+    trigger_job: "%{hiera('job_release_publish_latest')}"
 
   # This job is expecting that you have pushed up a branch called
   # latest to the repo.  The latest branch can be referenced with the
   # :ref => 'latest' option when calling the module in the consumer's Puppetfile.
-  "Project_%{hiera('project')}_Release_2_Publish_Latest":
+  "%{hiera('job_release_publish_latest')}":
     command: |
       git fetch origin latest
       git checkout latest
@@ -104,8 +96,7 @@ nsidc_jenkins::jobs:
 
 
   # Jobs for destroying machines
-
-  "Project_%{hiera('project')}_Destroy_VMs":
+  "%{hiera('job_destroy_vms')}":
     git:
       repo: "%{hiera('gitrepo')}"
 
