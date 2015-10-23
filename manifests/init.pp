@@ -1,8 +1,8 @@
 # A class to install drupal (or only drush)
 class drupal(
   $install = false,
-  $version = 7,
-  $drush_version = "7.x",
+  $version = 8,
+  $drush_version = "dev-master",
   $drupal_parent_directory = '/var/www',
   $drupal_user = 'www-data',
   $admin_user = 'vagrant',
@@ -84,6 +84,7 @@ class drupal(
         --verbose \
         --drupal-project-rename drupal \
         --destination=${drupal_parent_directory} \
+        --all \
         drupal-${version}
       ",
       user => $admin_user,
