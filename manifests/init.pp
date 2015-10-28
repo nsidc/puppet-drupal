@@ -1,8 +1,8 @@
 # A class to install drupal (or only drush)
 class drupal(
   $install = false,
-  $version = 8,
-  $drush_version = "dev-master",
+  $version = 7,
+  $drush_version = 7,
   $drupal_parent_directory = '/var/www',
   $drupal_user = 'www-data',
   $admin_user = 'vagrant',
@@ -79,12 +79,11 @@ class drupal(
   # Use drush to install drupal
   if $install {
 
+    # Download drupal
     exec{'drush-download-drupal':
       command => "yes | drush pm-download \
         --verbose \
-        --drupal-project-rename drupal \
         --destination=${drupal_parent_directory} \
-        --all \
         drupal-${version}
       ",
       user => $admin_user,
@@ -92,6 +91,15 @@ class drupal(
       creates => "${drupal_parent_directory}/drupal/index.php",
       path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin',
       require => [ Exec['install-drush'], File[$drupal_parent_directory] ],
+      notify => Exec['rename-drupal']
+    }
+
+    # Rename drupal directory to be just "drupal"
+    exec{'rename-drupal':
+      command => "mv ${drupal_parent_directory}/drupal* ${drupal_parent_directory}/drupal",
+      refreshonly => true,
+      creates => "${drupal_parent_directory}/drupal",
+      path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin',
     }
 
   }
