@@ -16,6 +16,7 @@ class drupal::php () {
   # FPM pool configuration
   php::fpm::pool{'drupal':
     listen => '/var/run/php5-fpm.sock',
+    listen_mode => '0666'
   }
 
   # PHP Extensions
