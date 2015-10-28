@@ -13,6 +13,15 @@ Vagrant.configure(2) do |config|
   # Symlink /vagrant into the puppet modules folder so it can be loaded like a module
   config.vm.provision "shell", inline: "mkdir -p /vagrant-nsidc-puppet; ln -sf /vagrant /vagrant-nsidc-puppet/drupal"
 
+  # Create directories needed by puppet 4
+  environment = VagrantPlugins::NSIDC::Plugin.environment
+  config.vm.provision "shell", inline: "
+    mkdir -p /etc/puppetlabs/code/environments/#{environment};
+    mkdir -p /etc/puppetlabs/puppet;
+    mkdir -p /var/log/puppetlabs;
+    mkdir -p /opt/puppetlabs/puppet;
+  "
+
   # Apply puppet
   config.vm.provision :nsidc_puppet
 
