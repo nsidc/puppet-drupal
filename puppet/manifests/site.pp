@@ -7,19 +7,6 @@ $puppet_manifest = $puppet['apply']['manifest']
 hiera_include('classes')
 
 if $environment == 'ci' {
-  # ci machine needs some python dependencies to install bumpversion,
-  # which can be used as a common way to bump versions for any project.
-  class { 'python':
-    version => 'system',
-    pip     => true,
-    dev     => true # Needed for fabric
-  }
-
-  python::pip { 'bumpversion':
-    pkgname => 'bumpversion',
-    ensure  => '0.5',
-    owner   => 'root'
-  }
 
   # Testing dependencies
   package { 'rake':

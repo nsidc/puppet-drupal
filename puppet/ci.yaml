@@ -26,8 +26,6 @@ job_checkout_project: "%{hiera('project')}_01_Checkout_Project"
 job_check_syntax: "%{hiera('project')}_02_Check_Syntax"
 job_run_unit_tests: "%{hiera('project')}_03_Run_Unit_Tests"
 job_run_acceptance_tests: "%{hiera('project')}_04_Run_Acceptance_Tests"
-job_bump_version_and_tag: "%{hiera('project')}_10_Release_Bump_Version_and_Tag"
-job_release_publish_latest: "%{hiera('project')}_11_Release_Publish_Latest"
 job_destroy_vms: "%{hiera('project')}_99_Destroy_VMs"
 
 # Jenkins Jobs
