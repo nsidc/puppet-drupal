@@ -1,3 +1,9 @@
+## puppet-drupal 1.0.1
+
+Bugfixes:
+
+  - Removed bumpversion and the release jobs
+
 ## puppet-drupal 1.0.0
 
 Features:
