@@ -130,9 +130,9 @@ define drupal::site (
           ${restore}",
         creates => "${drupal_parent_directory}/drupal/sites/${website}/settings.php",
         user => $admin_user,
-        path => '/bin:/sbin:/usr/bin:/usr/sbin',
+        path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin',
         require => [
-          Php::Pear::Module['drush'],
+          Exec['install-drush'],
           File[$restore],
           File[$drupal_parent_directory],
         ],
@@ -157,7 +157,7 @@ define drupal::site (
         cwd => "${drupal_parent_directory}/drupal",
         user => $admin_user,
         provider => shell,
-        path => '/bin:/sbin:/usr/bin:/usr/sbin',
+        path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin',
         require => Exec['drush-download-drupal'],
         creates => "${drupal_parent_directory}/drupal/sites/${website}/settings.php",
         notify => [
@@ -173,9 +173,9 @@ define drupal::site (
         command => "drush vset file_public_path sites/${website}/files",
         cwd => "${drupal_parent_directory}/drupal",
         user => $admin_user,
-        path => '/bin:/sbin:/usr/bin:/usr/sbin',
+        path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin',
         require => [
-          PHP::Pear::Module['drush'],
+          Exec['install-drush'],
           File["defaultsite-${website}"],
         ],
         refreshonly => true,

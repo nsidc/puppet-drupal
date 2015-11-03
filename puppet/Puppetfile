@@ -1,16 +1,12 @@
 forge 'https://forgeapi.puppetlabs.com'
 
-# Module installing packages with apt
-mod 'puppetlabs/apt', '1.8.0'
-mod 'rtyler/jenkins', '1.3.0'
-
 # Module for access to NSIDC Enterprise storage
 mod 'nsidc/nsidc_nfs',
   :git => 'git@bitbucket.org:/nsidc/puppet-nsidc-nfs.git',
   :ref => 'latest'
 
 # Module for configuring php and installing php modules
-mod 'example42-php', '2.0.21'
+mod 'mayflower/php'
 
 # Module for configuring postfix
 mod 'example42/postfix'

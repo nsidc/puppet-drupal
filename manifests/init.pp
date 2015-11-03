@@ -2,6 +2,7 @@
 class drupal(
   $install = false,
   $version = 7,
+  $drush_version = "7.x",
   $drupal_parent_directory = '/var/www',
   $drupal_user = 'www-data',
   $admin_user = 'vagrant',
@@ -11,12 +12,9 @@ class drupal(
 ) {
 
   # Load several puppet classes to setup the LAMP stack for Drupal
-  include ::php
   include ::drupal::apache
   include ::drupal::mysql
-  class {'::drupal::php':
-    require => Class['::php']
-  }
+  include ::drupal::php
 
   # Configure postfix to send emails for Drupal
   include postfix
@@ -40,26 +38,9 @@ class drupal(
     }
   }
 
-
   # Create drupal sites from defined types in hiera
   $drupalsites = hiera_hash('drupal::sites', {})
   create_resources('drupal::site', $drupalsites)
-
-  # Install drush (and dependencies) with pear
-  php::pear::module { 'drush':
-    repository  => 'pear.drush.org',
-    use_package  => false,
-    require => [
-      Php::Pear::Module['Console_Table'],
-      Php::Pear::Module['PEAR']
-    ]
-  }
-  php::pear::module { 'Console_Table':
-    use_package  => false,
-  }
-  php::pear::module { 'PEAR':
-    use_package  => false,
-  }
 
   # Setup drush config file for the admin user
   file{"/home/${admin_user}/.drush":
@@ -81,10 +62,23 @@ class drupal(
     require => Class['drupal::apache']
   }
 
+  # Install drush using composer
+  exec {'install-drush':
+    command => "su - ${admin_user} -c \"composer global require drush/drush:${drush_version}\"",
+    path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin',
+    creates => "/home/${admin_user}/.composer/vendor/bin/drush",
+    before => Exec['symlink-drush'],
+    require => Class['::php::composer'],
+  }
+  exec {'symlink-drush':
+    command => "ln -s /home/${admin_user}/.composer/vendor/bin/drush /usr/local/bin/",
+    creates => '/usr/local/bin/drush',
+    path => '/bin:/sbin:/usr/bin:/usr/sbin',
+  }
+
   # Use drush to install drupal
   if $install {
 
-    # Install drupal7 with drush
     exec{'drush-download-drupal':
       command => "yes | drush pm-download \
         --verbose \
@@ -95,9 +89,10 @@ class drupal(
       user => $admin_user,
       provider => shell,
       creates => "${drupal_parent_directory}/drupal/index.php",
-      path => '/bin:/sbin:/usr/bin:/usr/sbin',
-      require => [ PHP::Pear::Module['drush'], File[$drupal_parent_directory] ],
+      path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin',
+      require => [ Exec['install-drush'], File[$drupal_parent_directory] ],
     }
+
   }
 }
 
