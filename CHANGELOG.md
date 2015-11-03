@@ -1,3 +1,9 @@
+## puppet-drupal 1.0.2
+
+Bugfixes:
+
+  - Removed errant version number in metadata.json from failed bumpversion
+
 ## puppet-drupal 1.0.1
 
 Bugfixes:
