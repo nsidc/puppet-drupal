@@ -1,4 +1,4 @@
-## puppet-drupal 1.1.0
+## puppet-drupal 1.1.0 (unreleased)
 
 Features:
 
