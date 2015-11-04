@@ -1,9 +1,13 @@
-## puppet-drupal 1.1.0 (unreleased)
+## puppet-drupal 1.1.0
 
 Features:
 
   - Replaced example42/php puppet module with mayflower/php puppet module
   - Switched drush installation method to composer instead of pear
+
+Bugfixes:
+
+  - Updated spec to supply more facts for testing and to run unit tests as root
 
 ## puppet-drupal 1.0.2
 
