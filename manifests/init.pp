@@ -2,7 +2,7 @@
 class drupal(
   $install = false,
   $version = 7,
-  $drush_version = "7.x",
+  $drush_version = '6.x',
   $drupal_parent_directory = '/var/www',
   $drupal_user = 'www-data',
   $admin_user = 'vagrant',

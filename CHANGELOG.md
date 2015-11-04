@@ -1,3 +1,10 @@
+## puppet-drupal 1.1.1
+
+Bugfixes:
+
+  - Changed default drush version back to 6.x because 7.x will
+    not restore the database correctly
+
 ## puppet-drupal 1.1.0
 
 Features:
