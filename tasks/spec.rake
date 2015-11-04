@@ -20,7 +20,7 @@ namespace :spec do
     Dir.chdir('..')
     sh 'ln -s -f $PWD spec/fixtures/modules/drupal'
     sh 'git checkout spec/' # The puppet-install does bad things to spec/...
-    sh 'rake rspec'
+    sh 'sudo rake rspec'
     sh 'rm -f spec/fixtures/modules/drupal' # vagrant uses rsync --copy-links...
   end
 
