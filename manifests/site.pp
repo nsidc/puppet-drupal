@@ -128,6 +128,7 @@ define drupal::site (
         unless => "test -f ${drupal_parent_directory}/drupal/sites/${website}/settings.php",
         user => root,
         path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin',
+        require => Service['mysql'],
       }
 
       # Get filename from restore parameter
