@@ -1,3 +1,11 @@
+## puppet-drupal UNRELEASED
+
+Bugfixes:
+
+  - Added database creation to drush archive-restore process to fix
+    known issue in drush 7.x
+  - Changed default drush version to 7.x 
+
 ## puppet-drupal 1.1.1
 
 Bugfixes:
