@@ -25,7 +25,7 @@ if $environment == 'ci' {
 } else {
 
   class { 'drupal':
-    install => no,
+    install => true,
     mail_domain => 'example.com',
     mail_server => 'smtp.example.com'
   }
