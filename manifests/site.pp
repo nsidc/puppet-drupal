@@ -143,6 +143,7 @@ define drupal::site (
         path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin',
         require => [
           Exec['install-drush'],
+          Exec['mysql-create-drupal-database'],
           File[$restore],
           File[$drupal_parent_directory],
         ],
