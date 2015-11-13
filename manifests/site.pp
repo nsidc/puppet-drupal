@@ -120,6 +120,16 @@ define drupal::site (
 
     # Restore from a backup using drush 
     if $restore {
+
+      # Create drupal database first
+      exec{"mysql-create-drupal-database":
+        command => 'mysql < "create database drupal"',
+        provider => shell,
+        refreshonly => true,
+        user => root,
+        path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin',
+      }
+
       # Get filename from restore parameter
       file{$restore:}
       exec{"drush-archive-restore-${website}":
@@ -131,6 +141,7 @@ define drupal::site (
         creates => "${drupal_parent_directory}/drupal/sites/${website}/settings.php",
         user => $admin_user,
         path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin',
+        subscribe => Exec['mysql-create-drupal-database'],
         require => [
           Exec['install-drush'],
           File[$restore],
@@ -143,6 +154,7 @@ define drupal::site (
           File_line["search-cron-limit-${website}"],
         ]
       }
+
     } else {
 
       # If not restoring, create the site using drush instead
