@@ -27,7 +27,7 @@ if $environment == 'ci' {
   class { 'drupal':
     version => '8',
     drush_version => 'dev-master',
-    install => no,
+    install => true,
     mail_domain => 'example.com',
     mail_server => 'smtp.example.com'
   }
