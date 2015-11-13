@@ -123,7 +123,7 @@ define drupal::site (
 
       # Create drupal database first
       exec{"mysql-create-drupal-database":
-        command => 'mysql < "create database drupal"',
+        command => '/bin/echo "create database drupal" | mysql',
         provider => shell,
         unless => "test -f ${drupal_parent_directory}/drupal/sites/${website}/settings.php",
         user => root,
