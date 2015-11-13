@@ -125,7 +125,7 @@ define drupal::site (
       exec{"mysql-create-drupal-database":
         command => 'mysql < "create database drupal"',
         provider => shell,
-        refreshonly => true,
+        unless => "test -f ${drupal_parent_directory}/drupal/sites/${website}/settings.php",
         user => root,
         path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin',
       }
@@ -141,7 +141,6 @@ define drupal::site (
         creates => "${drupal_parent_directory}/drupal/sites/${website}/settings.php",
         user => $admin_user,
         path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin',
-        subscribe => Exec['mysql-create-drupal-database'],
         require => [
           Exec['install-drush'],
           File[$restore],
