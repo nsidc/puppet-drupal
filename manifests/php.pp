@@ -6,10 +6,11 @@ class drupal::php () {
     settings => {
       'max_execution_time' => '600',
       'error_reporting' => 'E_ALL',
-      'memory_limit' => '256M',
+      'memory_limit' => '1024M',
       'post_max_size' => '500M',
       'register_globals' => 'Off',
       'upload_max_filesize' => '500M',
+      'max_input_vars' => '9999',
     },
   }
 
