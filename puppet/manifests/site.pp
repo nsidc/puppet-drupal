@@ -25,11 +25,9 @@ if $environment == 'ci' {
 } else {
 
   class { 'drupal':
-    version => '8',
-    drush_version => 'dev-master',
+    version => '7',
+    drush_version => '7.x',
     install => true,
-    mail_domain => 'example.com',
-    mail_server => 'smtp.example.com'
   }
 
   drupal::site { 'localhost':
