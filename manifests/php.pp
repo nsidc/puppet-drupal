@@ -39,6 +39,11 @@ class drupal::php () {
     path => '/var/log/drupal/php5-fpm.log',
     require => File['/var/log/drupal'],
   }
+  file{'php5-error-log':
+    ensure => file,
+    path => '/var/log/drupal/php-error.log',
+    require => File['/var/log/drupal'],
+  }
 
   # FPM pool configuration
   php::fpm::pool{'drupal':
