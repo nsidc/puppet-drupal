@@ -7,7 +7,7 @@ define drupal::apache::conf ($conf = $title, $status = 'enabled') {
       notify => Service['apache2'],
       require => [
         Package['apache2'],
-        File ['/etc/apache2/conf-available'],
+        File['/etc/apache2/conf-available'],
       ]
     }
   } else {
@@ -17,7 +17,7 @@ define drupal::apache::conf ($conf = $title, $status = 'enabled') {
       notify => Service['apache2'],
       require => [
         Package['apache2'],
-        File ['/etc/apache2/conf-available'],
+        File['/etc/apache2/conf-available'],
       ]
     }
   }

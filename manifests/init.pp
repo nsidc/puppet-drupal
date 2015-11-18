@@ -16,6 +16,11 @@ class drupal(
   include ::drupal::mysql
   include ::drupal::php
 
+  # Create a log directory for drupal logs
+  file{'/var/log/drupal':
+    ensure => directory,
+  }
+
   # Configure postfix to send emails for Drupal
   include postfix
   if $mail_domain {
@@ -79,10 +84,10 @@ class drupal(
   # Use drush to install drupal
   if $install {
 
+    # Download drupal
     exec{'drush-download-drupal':
       command => "yes | drush pm-download \
         --verbose \
-        --drupal-project-rename drupal \
         --destination=${drupal_parent_directory} \
         drupal-${version}
       ",
@@ -91,6 +96,15 @@ class drupal(
       creates => "${drupal_parent_directory}/drupal/index.php",
       path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin',
       require => [ Exec['install-drush'], File[$drupal_parent_directory] ],
+      notify => Exec['rename-drupal']
+    }
+
+    # Rename drupal directory to be just "drupal"
+    exec{'rename-drupal':
+      command => "mv ${drupal_parent_directory}/drupal* ${drupal_parent_directory}/drupal",
+      refreshonly => true,
+      creates => "${drupal_parent_directory}/drupal",
+      path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin',
     }
 
   }

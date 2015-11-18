@@ -1,3 +1,15 @@
+## puppet-drupal UNRELEASED
+
+Features:
+
+  - Moved drupal apache logs into /var/log/drupal
+  - Moved drupal php logs into /var/log/drupal
+  - Increased PHP setting: memory_limit went from 256M to 1024M
+  - Increased PHP setting: max_input_vars went from 1000 to 9999
+  - Switched to puppet 4
+  - Refactored "--drupal-project-rename" option from drush pm-download
+    for better compatibility with new drush versions
+
 ## puppet-drupal 1.2
 
 Bugfixes:

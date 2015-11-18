@@ -10,6 +10,7 @@ virtualbox:
   box_url: http://snowhut.apps.int.nsidc.org/shares/export/sw/packages/vagrant/boxes/trusty64-nsidc.box
 puppet:
   enabled: true
+  version: 4
   execution_dir: /vagrant
   apply:
     options: --debug --verbose --detailed-exitcodes --hiera_config=./puppet/hiera.yaml
