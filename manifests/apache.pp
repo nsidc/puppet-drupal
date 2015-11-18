@@ -17,29 +17,8 @@ class drupal::apache() {
       Package['apache2-dev'],
       Package['libapache2-mod-fastcgi'],
       Drupal::Apache::Module['mpm_worker'],
-      File['/var/log/apache2/drupal'],
+      File['/var/log/drupal'],
     ]
-  }
-
-  # Fix up Apache default permissions 
-
-  # Grant general read permissions to apache logs for troubleshooting
-  file { '/var/log/apache2':
-    ensure => 'directory',
-    mode => 'a+rx',
-    require => Package['apache2'],
-    before => File['/var/log/apache2/drupal']
-  }
-  file { '/var/log/apache2/drupal':
-    ensure => 'directory',
-    mode => 'a+rx',
-    require => Package['apache2'],
-    notify => Exec['chmod-var-log-apache2']
-  }
-  exec { 'chmod-var-log-apache2':
-    command => 'chmod -R a+r /var/log/apache2',
-    path => '/bin:/sbin:/usr/bin:/usr/sbin',
-    refreshonly => true,
   }
 
   # Disable some default server-wide http settings
