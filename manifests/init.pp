@@ -16,6 +16,11 @@ class drupal(
   include ::drupal::mysql
   include ::drupal::php
 
+  # Create a log directory for drupal logs
+  file{'/var/log/drupal':
+    ensure => directory,
+  }
+
   # Configure postfix to send emails for Drupal
   include postfix
   if $mail_domain {
