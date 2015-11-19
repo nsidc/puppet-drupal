@@ -15,10 +15,12 @@ metadata.json
 Commit your changes, then choose between one of the next two options:
 
 Option #1: Don't update the 'latest' branch
+git checkout master
 git tag <new-version>
 git push origin master <new-version>
 
 Option #2: Update the 'latest' branch
+git checkout master
 git tag <new-version>
 git checkout latest
 git merge <new-version>
