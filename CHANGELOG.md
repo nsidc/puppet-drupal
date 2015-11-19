@@ -1,3 +1,10 @@
+
+## puppet-drupal UNRELEASED
+
+Features:
+
+  - Switched to using puppetlabs/mysql module for managing mysql
+
 ## puppet-drupal 1.3
 
 Features:
