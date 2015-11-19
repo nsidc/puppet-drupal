@@ -16,6 +16,9 @@ class drupal(
   include ::drupal::php
   include ::mysql::server
 
+  # Need this until next version of puppet-mysql (>3.6.1) is released
+  File['mysql-config-file'] ~> Service['mysqld']
+
   # Create a log directory for drupal logs
   file{'/var/log/drupal':
     ensure => directory,

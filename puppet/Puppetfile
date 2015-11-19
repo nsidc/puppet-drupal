@@ -10,7 +10,7 @@ mod 'mayflower/php'
 mod 'example42/postfix'
 
 # Module for configuring mysql
-mod 'puppetlabs/mysql'
+mod 'puppetlabs/mysql', '3.6.1'
 
 ## Build dependencies only
 
