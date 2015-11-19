@@ -1,9 +1,7 @@
-forge 'https://forgeapi.puppetlabs.com'
 
-# Module for access to NSIDC Enterprise storage
-mod 'nsidc/nsidc_nfs',
-  :git => 'git@bitbucket.org:/nsidc/puppet-nsidc-nfs.git',
-  :ref => 'latest'
+## Runtime dependencies
+
+forge 'https://forgeapi.puppetlabs.com'
 
 # Module for configuring php and installing php modules
 mod 'mayflower/php'
@@ -11,7 +9,13 @@ mod 'mayflower/php'
 # Module for configuring postfix
 mod 'example42/postfix'
 
+# Module for configuring mysql
+mod 'puppetlabs/mysql'
+
+## Build dependencies only
+
 # Module for creating NSIDC Jenkins servers
 mod 'nsidc/nsidc_jenkins',
   :git => 'git@bitbucket.org:/nsidc/puppet-nsidc-jenkins.git',
   :ref => 'latest'
+

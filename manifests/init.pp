@@ -13,8 +13,8 @@ class drupal(
 
   # Load several puppet classes to setup the LAMP stack for Drupal
   include ::drupal::apache
-  include ::drupal::mysql
   include ::drupal::php
+  include ::mysql::server
 
   # Create a log directory for drupal logs
   file{'/var/log/drupal':
