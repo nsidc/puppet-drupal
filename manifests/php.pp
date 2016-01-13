@@ -4,15 +4,15 @@ class drupal::php () {
   # PHP class-level settings
   class {'::php':
     settings => {
-      'max_execution_time' => '600',
-      'error_reporting' => 'E_ALL',
-      'memory_limit' => '1024M',
-      'post_max_size' => '500M',
-      'register_globals' => 'Off',
-      'upload_max_filesize' => '500M',
-      'max_input_vars' => '9999',
-      'log_errors' => '1',
-      'error_log' => '/var/log/drupal/php-error.log'
+      'PHP/max_execution_time' => '600',
+      'PHP/error_reporting' => 'E_ALL',
+      'PHP/memory_limit' => '1024M',
+      'PHP/post_max_size' => '500M',
+      'PHP/register_globals' => 'Off',
+      'PHP/upload_max_filesize' => '500M',
+      'PHP/max_input_vars' => '9999',
+      'PHP/log_errors' => 'On',
+      'PHP/error_log' => '/var/log/drupal/php-error.log'
     },
     require => [
       File['symlink-upstart-php-log'],
