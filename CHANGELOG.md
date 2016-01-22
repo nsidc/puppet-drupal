@@ -1,3 +1,10 @@
+## puppet-drupal 1.4.1
+
+Features:
+
+  - Fixed php settings merge
+  - Change composer drush install location to ~/.config/composer
+
 ## puppet-drupal 1.4
 
 Features:
