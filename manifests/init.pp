@@ -74,12 +74,12 @@ class drupal(
   exec {'install-drush':
     command => "su - ${admin_user} -c \"composer global require drush/drush:${drush_version}\"",
     path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin',
-    creates => "/home/${admin_user}/.composer/vendor/bin/drush",
+    creates => "/home/${admin_user}/.config/composer/vendor/bin/drush",
     before => Exec['symlink-drush'],
     require => Class['::php::composer'],
   }
   exec {'symlink-drush':
-    command => "ln -s /home/${admin_user}/.composer/vendor/bin/drush /usr/local/bin/",
+    command => "ln -s /home/${admin_user}/.config/composer/vendor/bin/drush /usr/local/bin/",
     creates => '/usr/local/bin/drush',
     path => '/bin:/sbin:/usr/bin:/usr/sbin',
   }
