@@ -182,8 +182,14 @@ define drupal::site (
         ]
       }
       # Set the public files location
+      include drupal
+      if ($drupal::version >= 6 and $drupal::version < 8) {
+        $drush_cmd = "vset"
+      } elsif ($drupal::version >= 8) {
+        $drush_cmd = "config-set settings"
+      }
       exec{"drush-vset-file_public_path-${website}":
-        command => "drush vset file_public_path sites/${website}/files",
+        command => "drush $drush_cmd file_public_path sites/${website}/files",
         cwd => "${drupal_parent_directory}/drupal",
         user => $admin_user,
         path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin',
