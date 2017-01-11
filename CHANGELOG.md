@@ -1,3 +1,9 @@
+## puppet-drupal 1.4.2
+
+Features:
+
+  - Support change from "drush vset" to "drush config-set (file)" for Drupal 8
+
 ## puppet-drupal 1.4.1
 
 Features:
