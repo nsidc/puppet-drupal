@@ -1,3 +1,9 @@
+## puppet-drupal 1.4.3
+
+Features:
+
+  - Pin example42-puppi to 2.2.6
+
 ## puppet-drupal 1.4.2
 
 Features:
